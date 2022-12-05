@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="https://latest.cactus.chat/cactus.js"></script>
+  <link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> Java学习笔记(第二十二天) | 虾米日记</title>
+  <link rel = 'canonical' href = 'https://wjinlei.github.io/posts/exp-java-day22/'>
+  <meta name="description" content="对酒当歌，人生几何，譬如朝露，去日苦多">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="Java学习笔记(第二十二天)" />
+<meta property="og:description" content="算法 关于算法复杂度  O(1) 常数时间  无论问题的规模有多大,总能在固定次操作后就能解决问题,代表算法有哈希桶,数组的随机寻址  O(n) 线性时间  解决问题的时间和问题规模成正比,问题规模越大,需要的时间越长,代表算法是遍历  O(log(n)) 对数时间  解决问题的时间和问题的对数成正比,每1次操作,解决问题的时间成倍减少,代表算法有二分查找,二叉树  O(n*log(n)) 基于比较的排序算法的下限  待Google  O(n^2) 平方时间  解决问题的时间和问题的平方成正比,每1次操作,解决问题的时间成倍增加,代表算法有冒泡排序 数据结构 程序=算法&#43;数据结构
+基本数据结构   数组
+ 数组的寻址时间是基于常数时间的,它的寻址总是能1次寻址就能得到想要的数据,我们称为随机访问(RandomAccess) 数组的插入时间是基于线性时间的,它每次插入1个元素都必须让其后的元素向后移1位,因此插入操作所需的时间和数组长度成正比 数组的删除时间是基于线性时间的,它每次删除1个元素都必须让其后的元素向前移1位,因此删除操作所需的时间和数组长度成正比 数组的查找时间  数组是有序的,它可以使用基于对数时间的算法,例如二分查找      链表
+ 链表的寻址时间是基于线性时间的,它想要查找1个元素,必须沿着链表的头或尾开始一直找下去,直到找到为止,
+因此它的寻址操作所需的时间和链表长度成正比 链表的插入时间是基于常数时间的,它想要插入1个元素,只需要让它前面的元素和后面的元素连接到它就可以了,
+因此它的插入操作总是能2次操作就能完成 链表的删除时间是基于常数时间的,它想要删除1个元素,只需要让它前面的元素连接到它后面的元素就可以了,
+因此它的删除操作总是能1次操作就能完成    栈(FILO)先进后出
+ 栈的寻址时间是基于线性的,它想要获取1个元素,必须从顶部挨个取出,因此它寻址操作所需的时间和栈长度成正比 栈的删除时间是基于常数的,它不能删除指定的元素,它每次只能删除1个栈顶的元素,因此它的插入操作总是能1次操作就能完成 栈的插入时间是基于常数的,它想要添加1个元素,直接向栈顶部添加即可,因此它的插入操作总是能1次操作就能完成    队列(FIFO)先进先出
+ 队列的寻址时间是基于线性的,它想要获取1个元素,必须从尾部挨个取出,因此它寻址操作所需的时间和队列长度成正比 队列的删除时间是基于常数的,它不能删除指定的元素,它每次只能删除1个尾部的元素,因此它的删除操作总是能1次操作就能完成 队列的插入时间是基于常数的,它想要添加1个元素,直接向队列头部添加即可,因此它的插入操作总是能1次操作就能完成    哈希表(HashTable)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wjinlei.github.io/posts/exp-java-day22/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-17T02:34:09+08:00" />
+<meta property="article:modified_time" content="2021-11-17T02:34:09+08:00" />
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Java学习笔记(第二十二天)"/>
+<meta name="twitter:description" content="算法 关于算法复杂度  O(1) 常数时间  无论问题的规模有多大,总能在固定次操作后就能解决问题,代表算法有哈希桶,数组的随机寻址  O(n) 线性时间  解决问题的时间和问题规模成正比,问题规模越大,需要的时间越长,代表算法是遍历  O(log(n)) 对数时间  解决问题的时间和问题的对数成正比,每1次操作,解决问题的时间成倍减少,代表算法有二分查找,二叉树  O(n*log(n)) 基于比较的排序算法的下限  待Google  O(n^2) 平方时间  解决问题的时间和问题的平方成正比,每1次操作,解决问题的时间成倍增加,代表算法有冒泡排序 数据结构 程序=算法&#43;数据结构
+基本数据结构   数组
+ 数组的寻址时间是基于常数时间的,它的寻址总是能1次寻址就能得到想要的数据,我们称为随机访问(RandomAccess) 数组的插入时间是基于线性时间的,它每次插入1个元素都必须让其后的元素向后移1位,因此插入操作所需的时间和数组长度成正比 数组的删除时间是基于线性时间的,它每次删除1个元素都必须让其后的元素向前移1位,因此删除操作所需的时间和数组长度成正比 数组的查找时间  数组是有序的,它可以使用基于对数时间的算法,例如二分查找      链表
+ 链表的寻址时间是基于线性时间的,它想要查找1个元素,必须沿着链表的头或尾开始一直找下去,直到找到为止,
+因此它的寻址操作所需的时间和链表长度成正比 链表的插入时间是基于常数时间的,它想要插入1个元素,只需要让它前面的元素和后面的元素连接到它就可以了,
+因此它的插入操作总是能2次操作就能完成 链表的删除时间是基于常数时间的,它想要删除1个元素,只需要让它前面的元素连接到它后面的元素就可以了,
+因此它的删除操作总是能1次操作就能完成    栈(FILO)先进后出
+ 栈的寻址时间是基于线性的,它想要获取1个元素,必须从顶部挨个取出,因此它寻址操作所需的时间和栈长度成正比 栈的删除时间是基于常数的,它不能删除指定的元素,它每次只能删除1个栈顶的元素,因此它的插入操作总是能1次操作就能完成 栈的插入时间是基于常数的,它想要添加1个元素,直接向栈顶部添加即可,因此它的插入操作总是能1次操作就能完成    队列(FIFO)先进先出
+ 队列的寻址时间是基于线性的,它想要获取1个元素,必须从尾部挨个取出,因此它寻址操作所需的时间和队列长度成正比 队列的删除时间是基于常数的,它不能删除指定的元素,它每次只能删除1个尾部的元素,因此它的删除操作总是能1次操作就能完成 队列的插入时间是基于常数的,它想要添加1个元素,直接向队列头部添加即可,因此它的插入操作总是能1次操作就能完成    哈希表(HashTable)"/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://wjinlei.github.io/css/styles.4c2b9aa1d874d6766f554b2d404e8fd62ab4761f51ee9b3f358d12e81e7fa43a1b4378db995bc1926bbe5ed98c060be5e7bd4f2470504cf94f22b4b3a74e62b6.css" integrity="sha512-TCuaodh01nZvVUstQE6P1iq0dh9R7ps/NY0S6B5/pDobQ3jbmVvBkmu&#43;XtmMBgvl571PJHBQTPlPIrSzp05itg=="> 
+
+  
+   <link rel="stylesheet" href="https://wjinlei.github.io/css/custom.css"> 
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://wjinlei.github.io/images/favicon.ico" />
+
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+  <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;" aria-label="Top of Page"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">Writings</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li>
+          <a class="icon" href=" https://wjinlei.github.io/posts/exp-java-day21/" aria-label="Previous">
+            <i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i>
+          </a>
+        </li>
+        
+        
+        <li>
+          <a class="icon" href="https://wjinlei.github.io/posts/exp-java-day23/" aria-label="Next">
+            <i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+            <i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i>
+          </a>
+        </li>
+        <li>
+          <a class="icon" href="#" aria-label="Share">
+            <i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i>
+          </a>
+        </li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f" aria-label="Facebook">
+      <i class="fab fa-facebook " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&text=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="Twitter">
+      <i class="fab fa-twitter " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="Linkedin">
+      <i class="fab fa-linkedin " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&is_video=false&description=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="Pinterest">
+      <i class="fab fa-pinterest " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29&body=Check out this article: https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f" aria-label="Email">
+      <i class="fas fa-envelope " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="Pocket">
+      <i class="fab fa-get-pocket " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="reddit">
+      <i class="fab fa-reddit " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&name=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29&description=%e7%ae%97%e6%b3%95%20%e5%85%b3%e4%ba%8e%e7%ae%97%e6%b3%95%e5%a4%8d%e6%9d%82%e5%ba%a6%20%20O%281%29%20%e5%b8%b8%e6%95%b0%e6%97%b6%e9%97%b4%20%20%e6%97%a0%e8%ae%ba%e9%97%ae%e9%a2%98%e7%9a%84%e8%a7%84%e6%a8%a1%e6%9c%89%e5%a4%9a%e5%a4%a7%2c%e6%80%bb%e8%83%bd%e5%9c%a8%e5%9b%ba%e5%ae%9a%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%90%8e%e5%b0%b1%e8%83%bd%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%2c%e4%bb%a3%e8%a1%a8%e7%ae%97%e6%b3%95%e6%9c%89%e5%93%88%e5%b8%8c%e6%a1%b6%2c%e6%95%b0%e7%bb%84%e7%9a%84%e9%9a%8f%e6%9c%ba%e5%af%bb%e5%9d%80%20%20O%28n%29%20%e7%ba%bf%e6%80%a7%e6%97%b6%e9%97%b4%20%20%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e9%97%ae%e9%a2%98%e8%a7%84%e6%a8%a1%e6%88%90%e6%ad%a3%e6%af%94%2c%e9%97%ae%e9%a2%98%e8%a7%84%e6%a8%a1%e8%b6%8a%e5%a4%a7%2c%e9%9c%80%e8%a6%81%e7%9a%84%e6%97%b6%e9%97%b4%e8%b6%8a%e9%95%bf%2c%e4%bb%a3%e8%a1%a8%e7%ae%97%e6%b3%95%e6%98%af%e9%81%8d%e5%8e%86%20%20O%28log%28n%29%29%20%e5%af%b9%e6%95%b0%e6%97%b6%e9%97%b4%20%20%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e9%97%ae%e9%a2%98%e7%9a%84%e5%af%b9%e6%95%b0%e6%88%90%e6%ad%a3%e6%af%94%2c%e6%af%8f1%e6%ac%a1%e6%93%8d%e4%bd%9c%2c%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%e7%9a%84%e6%97%b6%e9%97%b4%e6%88%90%e5%80%8d%e5%87%8f%e5%b0%91%2c%e4%bb%a3%e8%a1%a8%e7%ae%97%e6%b3%95%e6%9c%89%e4%ba%8c%e5%88%86%e6%9f%a5%e6%89%be%2c%e4%ba%8c%e5%8f%89%e6%a0%91%20%20O%28n%2alog%28n%29%29%20%e5%9f%ba%e4%ba%8e%e6%af%94%e8%be%83%e7%9a%84%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95%e7%9a%84%e4%b8%8b%e9%99%90%20%20%e5%be%85Google%20%20O%28n%5e2%29%20%e5%b9%b3%e6%96%b9%e6%97%b6%e9%97%b4%20%20%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e9%97%ae%e9%a2%98%e7%9a%84%e5%b9%b3%e6%96%b9%e6%88%90%e6%ad%a3%e6%af%94%2c%e6%af%8f1%e6%ac%a1%e6%93%8d%e4%bd%9c%2c%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%e7%9a%84%e6%97%b6%e9%97%b4%e6%88%90%e5%80%8d%e5%a2%9e%e5%8a%a0%2c%e4%bb%a3%e8%a1%a8%e7%ae%97%e6%b3%95%e6%9c%89%e5%86%92%e6%b3%a1%e6%8e%92%e5%ba%8f%20%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%20%e7%a8%8b%e5%ba%8f%3d%e7%ae%97%e6%b3%95%2b%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%0a%e5%9f%ba%e6%9c%ac%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%20%20%20%e6%95%b0%e7%bb%84%0a%20%e6%95%b0%e7%bb%84%e7%9a%84%e5%af%bb%e5%9d%80%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e7%9a%84%e5%af%bb%e5%9d%80%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e5%af%bb%e5%9d%80%e5%b0%b1%e8%83%bd%e5%be%97%e5%88%b0%e6%83%b3%e8%a6%81%e7%9a%84%e6%95%b0%e6%8d%ae%2c%e6%88%91%e4%bb%ac%e7%a7%b0%e4%b8%ba%e9%9a%8f%e6%9c%ba%e8%ae%bf%e9%97%ae%28RandomAccess%29%20%e6%95%b0%e7%bb%84%e7%9a%84%e6%8f%92%e5%85%a5%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e7%ba%bf%e6%80%a7%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e6%af%8f%e6%ac%a1%e6%8f%92%e5%85%a51%e4%b8%aa%e5%85%83%e7%b4%a0%e9%83%bd%e5%bf%85%e9%a1%bb%e8%ae%a9%e5%85%b6%e5%90%8e%e7%9a%84%e5%85%83%e7%b4%a0%e5%90%91%e5%90%8e%e7%a7%bb1%e4%bd%8d%2c%e5%9b%a0%e6%ad%a4%e6%8f%92%e5%85%a5%e6%93%8d%e4%bd%9c%e6%89%80%e9%9c%80%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e6%95%b0%e7%bb%84%e9%95%bf%e5%ba%a6%e6%88%90%e6%ad%a3%e6%af%94%20%e6%95%b0%e7%bb%84%e7%9a%84%e5%88%a0%e9%99%a4%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e7%ba%bf%e6%80%a7%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e6%af%8f%e6%ac%a1%e5%88%a0%e9%99%a41%e4%b8%aa%e5%85%83%e7%b4%a0%e9%83%bd%e5%bf%85%e9%a1%bb%e8%ae%a9%e5%85%b6%e5%90%8e%e7%9a%84%e5%85%83%e7%b4%a0%e5%90%91%e5%89%8d%e7%a7%bb1%e4%bd%8d%2c%e5%9b%a0%e6%ad%a4%e5%88%a0%e9%99%a4%e6%93%8d%e4%bd%9c%e6%89%80%e9%9c%80%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e6%95%b0%e7%bb%84%e9%95%bf%e5%ba%a6%e6%88%90%e6%ad%a3%e6%af%94%20%e6%95%b0%e7%bb%84%e7%9a%84%e6%9f%a5%e6%89%be%e6%97%b6%e9%97%b4%20%20%e6%95%b0%e7%bb%84%e6%98%af%e6%9c%89%e5%ba%8f%e7%9a%84%2c%e5%ae%83%e5%8f%af%e4%bb%a5%e4%bd%bf%e7%94%a8%e5%9f%ba%e4%ba%8e%e5%af%b9%e6%95%b0%e6%97%b6%e9%97%b4%e7%9a%84%e7%ae%97%e6%b3%95%2c%e4%be%8b%e5%a6%82%e4%ba%8c%e5%88%86%e6%9f%a5%e6%89%be%20%20%20%20%20%20%e9%93%be%e8%a1%a8%0a%20%e9%93%be%e8%a1%a8%e7%9a%84%e5%af%bb%e5%9d%80%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e7%ba%bf%e6%80%a7%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e6%9f%a5%e6%89%be1%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e5%bf%85%e9%a1%bb%e6%b2%bf%e7%9d%80%e9%93%be%e8%a1%a8%e7%9a%84%e5%a4%b4%e6%88%96%e5%b0%be%e5%bc%80%e5%a7%8b%e4%b8%80%e7%9b%b4%e6%89%be%e4%b8%8b%e5%8e%bb%2c%e7%9b%b4%e5%88%b0%e6%89%be%e5%88%b0%e4%b8%ba%e6%ad%a2%2c%0a%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e5%af%bb%e5%9d%80%e6%93%8d%e4%bd%9c%e6%89%80%e9%9c%80%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e9%93%be%e8%a1%a8%e9%95%bf%e5%ba%a6%e6%88%90%e6%ad%a3%e6%af%94%20%e9%93%be%e8%a1%a8%e7%9a%84%e6%8f%92%e5%85%a5%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e6%8f%92%e5%85%a51%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e5%8f%aa%e9%9c%80%e8%a6%81%e8%ae%a9%e5%ae%83%e5%89%8d%e9%9d%a2%e7%9a%84%e5%85%83%e7%b4%a0%e5%92%8c%e5%90%8e%e9%9d%a2%e7%9a%84%e5%85%83%e7%b4%a0%e8%bf%9e%e6%8e%a5%e5%88%b0%e5%ae%83%e5%b0%b1%e5%8f%af%e4%bb%a5%e4%ba%86%2c%0a%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e6%8f%92%e5%85%a5%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd2%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%e9%93%be%e8%a1%a8%e7%9a%84%e5%88%a0%e9%99%a4%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e5%88%a0%e9%99%a41%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e5%8f%aa%e9%9c%80%e8%a6%81%e8%ae%a9%e5%ae%83%e5%89%8d%e9%9d%a2%e7%9a%84%e5%85%83%e7%b4%a0%e8%bf%9e%e6%8e%a5%e5%88%b0%e5%ae%83%e5%90%8e%e9%9d%a2%e7%9a%84%e5%85%83%e7%b4%a0%e5%b0%b1%e5%8f%af%e4%bb%a5%e4%ba%86%2c%0a%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e5%88%a0%e9%99%a4%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%20%20%20%e6%a0%88%28FILO%29%e5%85%88%e8%bf%9b%e5%90%8e%e5%87%ba%0a%20%e6%a0%88%e7%9a%84%e5%af%bb%e5%9d%80%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e7%ba%bf%e6%80%a7%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e8%8e%b7%e5%8f%961%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e5%bf%85%e9%a1%bb%e4%bb%8e%e9%a1%b6%e9%83%a8%e6%8c%a8%e4%b8%aa%e5%8f%96%e5%87%ba%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e5%af%bb%e5%9d%80%e6%93%8d%e4%bd%9c%e6%89%80%e9%9c%80%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e6%a0%88%e9%95%bf%e5%ba%a6%e6%88%90%e6%ad%a3%e6%af%94%20%e6%a0%88%e7%9a%84%e5%88%a0%e9%99%a4%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e7%9a%84%2c%e5%ae%83%e4%b8%8d%e8%83%bd%e5%88%a0%e9%99%a4%e6%8c%87%e5%ae%9a%e7%9a%84%e5%85%83%e7%b4%a0%2c%e5%ae%83%e6%af%8f%e6%ac%a1%e5%8f%aa%e8%83%bd%e5%88%a0%e9%99%a41%e4%b8%aa%e6%a0%88%e9%a1%b6%e7%9a%84%e5%85%83%e7%b4%a0%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e6%8f%92%e5%85%a5%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%e6%a0%88%e7%9a%84%e6%8f%92%e5%85%a5%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e6%b7%bb%e5%8a%a01%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e7%9b%b4%e6%8e%a5%e5%90%91%e6%a0%88%e9%a1%b6%e9%83%a8%e6%b7%bb%e5%8a%a0%e5%8d%b3%e5%8f%af%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e6%8f%92%e5%85%a5%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%20%20%20%e9%98%9f%e5%88%97%28FIFO%29%e5%85%88%e8%bf%9b%e5%85%88%e5%87%ba%0a%20%e9%98%9f%e5%88%97%e7%9a%84%e5%af%bb%e5%9d%80%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e7%ba%bf%e6%80%a7%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e8%8e%b7%e5%8f%961%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e5%bf%85%e9%a1%bb%e4%bb%8e%e5%b0%be%e9%83%a8%e6%8c%a8%e4%b8%aa%e5%8f%96%e5%87%ba%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e5%af%bb%e5%9d%80%e6%93%8d%e4%bd%9c%e6%89%80%e9%9c%80%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e9%98%9f%e5%88%97%e9%95%bf%e5%ba%a6%e6%88%90%e6%ad%a3%e6%af%94%20%e9%98%9f%e5%88%97%e7%9a%84%e5%88%a0%e9%99%a4%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e7%9a%84%2c%e5%ae%83%e4%b8%8d%e8%83%bd%e5%88%a0%e9%99%a4%e6%8c%87%e5%ae%9a%e7%9a%84%e5%85%83%e7%b4%a0%2c%e5%ae%83%e6%af%8f%e6%ac%a1%e5%8f%aa%e8%83%bd%e5%88%a0%e9%99%a41%e4%b8%aa%e5%b0%be%e9%83%a8%e7%9a%84%e5%85%83%e7%b4%a0%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e5%88%a0%e9%99%a4%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%e9%98%9f%e5%88%97%e7%9a%84%e6%8f%92%e5%85%a5%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e6%b7%bb%e5%8a%a01%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e7%9b%b4%e6%8e%a5%e5%90%91%e9%98%9f%e5%88%97%e5%a4%b4%e9%83%a8%e6%b7%bb%e5%8a%a0%e5%8d%b3%e5%8f%af%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e6%8f%92%e5%85%a5%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%20%20%20%e5%93%88%e5%b8%8c%e8%a1%a8%28HashTable%29" aria-label="Tumblr">
+      <i class="fab fa-tumblr " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&t=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="Hacker News">
+      <i class="fab fa-hacker-news " aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+    
+  </span>
+</div>
+
+
+  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+      <h1 class="posttitle" itemprop="name headline">
+        Java学习笔记(第二十二天)
+      </h1>
+      <div class="meta">
+        
+        <div class="postdate">
+          
+          <time datetime="2021-11-17 02:34:09 &#43;0800 CST" itemprop="datePublished">2021-11-17</time>
+          
+        </div>
+        
+        
+        <div class="article-read-time">
+          <i class="far fa-clock"></i>
+          
+          21 minute read
+        </div>
+        
+        
+        
+      </div>
+    </header>
+
+  
+    
+    <div id="toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#算法">算法</a>
+      <ul>
+        <li><a href="#关于算法复杂度">关于算法复杂度</a></li>
+      </ul>
+    </li>
+    <li><a href="#数据结构">数据结构</a>
+      <ul>
+        <li><a href="#基本数据结构">基本数据结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#手写算法与数据结构实战">手写算法与数据结构实战</a>
+      <ul>
+        <li><a href="#手写二分查找">手写二分查找</a></li>
+        <li><a href="#手写冒泡排序">手写冒泡排序</a></li>
+        <li><a href="#手写选择排序">手写选择排序</a></li>
+        <li><a href="#手写快速排序">手写快速排序</a></li>
+        <li><a href="#手写归并排序">手写归并排序</a></li>
+        <li><a href="#手写插入排序">手写插入排序</a></li>
+        <li><a href="#手写堆排序">手写堆排序</a></li>
+        <li><a href="#手写猴子排序">手写猴子排序</a></li>
+        <li><a href="#手写睡眠排序">手写睡眠排序</a></li>
+        <li><a href="#遍历二叉树">遍历二叉树</a></li>
+        <li><a href="#手写双向链表">手写双向链表</a></li>
+        <li><a href="#原地翻转一个单链表">原地翻转一个单链表</a></li>
+        <li><a href="#手写一个stack栈">手写一个Stack(栈)</a></li>
+        <li><a href="#手写一个queue队列">手写一个Queue(队列)</a></li>
+      </ul>
+    </li>
+    <li><a href="#hashmap实现原理">HashMap实现原理</a>
+      <ul>
+        <li><a href="#java-7">Java 7</a>
+          <ul>
+            <li><a href="#底层实现是数组链表">底层实现是数组+链表</a></li>
+            <li><a href="#默认容量16">默认容量<code>16</code></a></li>
+            <li><a href="#负载因素075f">负载因素<code>0.75f</code></a></li>
+            <li><a href="#什么时候扩容">什么时候扩容?</a></li>
+            <li><a href="#如何扩容">如何扩容?</a></li>
+            <li><a href="#resize方法中的transfer方法是一切问题的根源">resize()方法中的transfer()方法是一切问题的根源</a></li>
+            <li><a href="#java-7-hashmap存在的问题">Java 7 HashMap存在的问题</a></li>
+          </ul>
+        </li>
+        <li><a href="#java-8-hashmap-对-java-7-hashmap-的改进">Java 8 HashMap 对 Java 7 HashMap 的改进</a>
+          <ul>
+            <li><a href="#数据结构由之前的数组链表改成了数组红黑树">数据结构由之前的数组+链表,改成了数组+红黑树</a></li>
+            <li><a href="#为什么转化成红黑树的阈值是8">为什么转化成红黑树的阈值是<code>8</code>?</a></li>
+            <li><a href="#resize-调整大小时保持了顺序避免了并发环境下的环形链接的产生">resize 调整大小时,保持了顺序,避免了并发环境下的环形链接的产生</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    <div class="content" itemprop="articleBody">
+      <h2 id="算法">算法</h2>
+<h3 id="关于算法复杂度">关于算法复杂度</h3>
+<ul>
+<li>O(1) <code>常数时间</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">无论问题的规模有多大,总能在固定次操作后就能解决问题,代表算法有哈希桶,数组的随机寻址
+</code></pre></div><ul>
+<li>O(n) <code>线性时间</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">解决问题的时间和问题规模成正比,问题规模越大,需要的时间越长,代表算法是遍历
+</code></pre></div><ul>
+<li>O(log(n)) <code>对数时间</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">解决问题的时间和问题的对数成正比,每1次操作,解决问题的时间成倍减少,代表算法有二分查找,二叉树
+</code></pre></div><ul>
+<li>O(n*log(n)) <code>基于比较的排序算法的下限</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">待Google
+</code></pre></div><ul>
+<li>O(n^2) <code>平方时间</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">解决问题的时间和问题的平方成正比,每1次操作,解决问题的时间成倍增加,代表算法有冒泡排序
+</code></pre></div><h2 id="数据结构">数据结构</h2>
+<p>程序=算法+数据结构</p>
+<h3 id="基本数据结构">基本数据结构</h3>
+<ul>
+<li>
+<p>数组</p>
+<ul>
+<li>数组的寻址时间是基于常数时间的,它的寻址总是能1次寻址就能得到想要的数据,我们称为随机访问(RandomAccess)</li>
+<li>数组的插入时间是基于线性时间的,它每次插入1个元素都必须让其后的元素向后移1位,因此插入操作所需的时间和数组长度成正比</li>
+<li>数组的删除时间是基于线性时间的,它每次删除1个元素都必须让其后的元素向前移1位,因此删除操作所需的时间和数组长度成正比</li>
+<li>数组的查找时间
+<ul>
+<li>数组是有序的,它可以使用基于对数时间的算法,例如二分查找</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>链表</p>
+<ul>
+<li>链表的寻址时间是基于线性时间的,它想要查找1个元素,必须沿着链表的头或尾开始一直找下去,直到找到为止,<br>
+因此它的寻址操作所需的时间和链表长度成正比</li>
+<li>链表的插入时间是基于常数时间的,它想要插入1个元素,只需要让它前面的元素和后面的元素连接到它就可以了,<br>
+因此它的插入操作总是能2次操作就能完成</li>
+<li>链表的删除时间是基于常数时间的,它想要删除1个元素,只需要让它前面的元素连接到它后面的元素就可以了,<br>
+因此它的删除操作总是能1次操作就能完成</li>
+</ul>
+</li>
+<li>
+<p>栈(FILO)先进后出</p>
+<ul>
+<li>栈的寻址时间是基于线性的,它想要获取1个元素,必须从顶部挨个取出,因此它寻址操作所需的时间和栈长度成正比</li>
+<li>栈的删除时间是基于常数的,它不能删除指定的元素,它每次只能删除1个栈顶的元素,因此它的插入操作总是能1次操作就能完成</li>
+<li>栈的插入时间是基于常数的,它想要添加1个元素,直接向栈顶部添加即可,因此它的插入操作总是能1次操作就能完成</li>
+</ul>
+</li>
+<li>
+<p>队列(FIFO)先进先出</p>
+<ul>
+<li>队列的寻址时间是基于线性的,它想要获取1个元素,必须从尾部挨个取出,因此它寻址操作所需的时间和队列长度成正比</li>
+<li>队列的删除时间是基于常数的,它不能删除指定的元素,它每次只能删除1个尾部的元素,因此它的删除操作总是能1次操作就能完成</li>
+<li>队列的插入时间是基于常数的,它想要添加1个元素,直接向队列头部添加即可,因此它的插入操作总是能1次操作就能完成</li>
+</ul>
+</li>
+<li>
+<p>哈希表(HashTable)</p>
+<ul>
+<li>它的寻址,删除,插入都是基于常数时间的(理想情况下)</li>
+<li>哈希表的底层是依靠一个一个<code>桶</code>来存储数据的,每个元素经过哈希运算后,会丢到一个对应的桶中,<br>
+理想情况下每一个元素都能对应一个桶,因此它的寻址,删除,插入都是基于常数时间的</li>
+<li>在某些情况下,可能会发生哈希碰撞,不同的元素可能会丢进同一个桶中,而在<code>Java 7</code>之前,HashMap里面默认桶的实现是链表,<br>
+这会导致它退化成链表结构,这样的话,它的寻址,删除,插入操作都会变成基于线性的<code>O(n)</code>,<br>
+在<code>Java 8</code>之后,默认桶的实现改成了链表+红黑树,这极大的避免了哈希碰撞的产生</li>
+</ul>
+</li>
+</ul>
+<h2 id="手写算法与数据结构实战">手写算法与数据结构实战</h2>
+<h3 id="手写二分查找">手写二分查找</h3>
+<p><img src="/image/exp-java-day22/binarySearch.gif" alt="binarySearch"></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Main</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">binarySearch</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">[]</span> arr<span style="color:#000;font-weight:bold">,</span> <span style="color:#458;font-weight:bold">int</span> target<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#458;font-weight:bold">int</span> head <span style="color:#000;font-weight:bold">=</span> 0<span style="color:#000;font-weight:bold">,</span> tail <span style="color:#000;font-weight:bold">=</span> arr<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">length</span> <span style="color:#000;font-weight:bold">-</span> 1<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">while</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000;font-weight:bold">true</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#458;font-weight:bold">int</span> mid <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">(</span>head <span style="color:#000;font-weight:bold">+</span> tail<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">/</span> 2<span style="color:#000;font-weight:bold">;</span>
+
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>target <span style="color:#000;font-weight:bold">==</span> arr<span style="color:#000;font-weight:bold">[</span>head<span style="color:#000;font-weight:bold">])</span> <span style="color:#000;font-weight:bold">{</span>
+                <span style="color:#000;font-weight:bold">return</span> head<span style="color:#000;font-weight:bold">;</span>
+            <span style="color:#000;font-weight:bold">}</span>
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>target <span style="color:#000;font-weight:bold">==</span> arr<span style="color:#000;font-weight:bold">[</span>tail<span style="color:#000;font-weight:bold">])</span> <span style="color:#000;font-weight:bold">{</span>
+                <span style="color:#000;font-weight:bold">return</span> tail<span style="color:#000;font-weight:bold">;</span>
+            <span style="color:#000;font-weight:bold">}</span>
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>target <span style="color:#000;font-weight:bold">==</span> arr<span style="color:#000;font-weight:bold">[</span>mid<span style="color:#000;font-weight:bold">])</span> <span style="color:#000;font-weight:bold">{</span>
+                <span style="color:#000;font-weight:bold">return</span> mid<span style="color:#000;font-weight:bold">;</span>
+            <span style="color:#000;font-weight:bold">}</span>
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>head <span style="color:#000;font-weight:bold">&gt;=</span> mid <span style="color:#000;font-weight:bold">||</span> tail <span style="color:#000;font-weight:bold">&lt;=</span> mid<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+                <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">-</span>1<span style="color:#000;font-weight:bold">;</span>
+            <span style="color:#000;font-weight:bold">}</span>
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>target <span style="color:#000;font-weight:bold">&lt;</span> arr<span style="color:#000;font-weight:bold">[</span>mid<span style="color:#000;font-weight:bold">])</span> <span style="color:#000;font-weight:bold">{</span>
+                tail <span style="color:#000;font-weight:bold">=</span> mid<span style="color:#000;font-weight:bold">;</span>
+            <span style="color:#000;font-weight:bold">}</span>
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>target <span style="color:#000;font-weight:bold">&gt;</span> arr<span style="color:#000;font-weight:bold">[</span>mid<span style="color:#000;font-weight:bold">])</span> <span style="color:#000;font-weight:bold">{</span>
+                head <span style="color:#000;font-weight:bold">=</span> mid<span style="color:#000;font-weight:bold">;</span>
+            <span style="color:#000;font-weight:bold">}</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">main</span><span style="color:#000;font-weight:bold">(</span>String<span style="color:#000;font-weight:bold">[]</span> args<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        System<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">out</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">println</span><span style="color:#000;font-weight:bold">(</span>binarySearch<span style="color:#000;font-weight:bold">(</span><span style="color:#000;font-weight:bold">new</span> <span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">[]{</span>1<span style="color:#000;font-weight:bold">,</span> 4<span style="color:#000;font-weight:bold">,</span> 5<span style="color:#000;font-weight:bold">,</span> 10<span style="color:#000;font-weight:bold">,</span> 12<span style="color:#000;font-weight:bold">,</span> 23<span style="color:#000;font-weight:bold">},</span> 12<span style="color:#000;font-weight:bold">));</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h3 id="手写冒泡排序">手写冒泡排序</h3>
+<p><img src="/image/exp-java-day22/bubbleSort.gif" alt="bubbleSort"></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Sort</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">main</span><span style="color:#000;font-weight:bold">(</span>String<span style="color:#000;font-weight:bold">[]</span> args<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">[]</span> array1 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> <span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#000;font-weight:bold">{</span>4<span style="color:#000;font-weight:bold">,</span> 8<span style="color:#000;font-weight:bold">,</span> 1<span style="color:#000;font-weight:bold">,</span> 7<span style="color:#000;font-weight:bold">,</span> 4<span style="color:#000;font-weight:bold">,</span> 0<span style="color:#000;font-weight:bold">,</span> 5<span style="color:#000;font-weight:bold">,</span> 8<span style="color:#000;font-weight:bold">,</span> 7<span style="color:#000;font-weight:bold">,</span> 5<span style="color:#000;font-weight:bold">,</span> 9<span style="color:#000;font-weight:bold">,</span> 6<span style="color:#000;font-weight:bold">,</span> 4<span style="color:#000;font-weight:bold">,</span> 0<span style="color:#000;font-weight:bold">};</span>
+        sort1<span style="color:#000;font-weight:bold">(</span>array1<span style="color:#000;font-weight:bold">);</span>
+        System<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">out</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">println</span><span style="color:#000;font-weight:bold">(</span>Arrays<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">toString</span><span style="color:#000;font-weight:bold">(</span>array1<span style="color:#000;font-weight:bold">));</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#998;font-style:italic">// 按照从小到大排序
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">sort1</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">[]</span> array<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#998;font-style:italic">// 控制轮数,每一轮找出一个最大值
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#000;font-weight:bold">for</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> 0<span style="color:#000;font-weight:bold">;</span> i <span style="color:#000;font-weight:bold">&lt;</span> array<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">length</span> <span style="color:#000;font-weight:bold">-</span> 1<span style="color:#000;font-weight:bold">;</span> i<span style="color:#000;font-weight:bold">++)</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#998;font-style:italic">// 因为每一轮都已经找出了一个最大值,那么查找次数要依次递减
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#998;font-style:italic">// 例如第一轮,还没有找到最大值,那么就要查找所有元素进行比较
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#998;font-style:italic">// 第二轮,已经找到了一个最大值,那么就要-1个
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#998;font-style:italic">// 第三轮,已经找到了两个最大值,-2个
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#998;font-style:italic">// 以此类推,这就是为什么要 -i 的原因
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#000;font-weight:bold">for</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> j <span style="color:#000;font-weight:bold">=</span> 0<span style="color:#000;font-weight:bold">;</span> j <span style="color:#000;font-weight:bold">&lt;</span> array<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">length</span> <span style="color:#000;font-weight:bold">-</span> 1 <span style="color:#000;font-weight:bold">-</span> i<span style="color:#000;font-weight:bold">;</span> j<span style="color:#000;font-weight:bold">++)</span> <span style="color:#000;font-weight:bold">{</span>
+                <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>array<span style="color:#000;font-weight:bold">[</span>j<span style="color:#000;font-weight:bold">]</span> <span style="color:#000;font-weight:bold">&gt;</span> array<span style="color:#000;font-weight:bold">[</span>j<span style="color:#000;font-weight:bold">+</span>1<span style="color:#000;font-weight:bold">])</span> <span style="color:#000;font-weight:bold">{</span>
+                    swap<span style="color:#000;font-weight:bold">(</span>array<span style="color:#000;font-weight:bold">,</span> j<span style="color:#000;font-weight:bold">,</span> j<span style="color:#000;font-weight:bold">+</span>1<span style="color:#000;font-weight:bold">);</span>
+                <span style="color:#000;font-weight:bold">}</span>
+            <span style="color:#000;font-weight:bold">}</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">swap</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">[]</span> array<span style="color:#000;font-weight:bold">,</span> <span style="color:#458;font-weight:bold">int</span> x<span style="color:#000;font-weight:bold">,</span> <span style="color:#458;font-weight:bold">int</span> y<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#458;font-weight:bold">int</span> temp <span style="color:#000;font-weight:bold">=</span> array<span style="color:#000;font-weight:bold">[</span>x<span style="color:#000;font-weight:bold">];</span>
+        array<span style="color:#000;font-weight:bold">[</span>x<span style="color:#000;font-weight:bold">]</span> <span style="color:#000;font-weight:bold">=</span> array<span style="color:#000;font-weight:bold">[</span>y<span style="color:#000;font-weight:bold">];</span>
+        array<span style="color:#000;font-weight:bold">[</span>y<span style="color:#000;font-weight:bold">]</span> <span style="color:#000;font-weight:bold">=</span> temp<span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h3 id="手写选择排序">手写选择排序</h3>
+<p>选择排序和冒泡排序差不多,唯一的好处是,它一轮只交换一次,每次比较记录最大值或最小值的索引
+<img src="/image/exp-java-day22/selectionSort.gif" alt="selectionSort"></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Sort</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">main</span><span style="color:#000;font-weight:bold">(</span>String<span style="color:#000;font-weight:bold">[]</span> args<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">[]</span> array2 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> <span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">[]{</span>4<span style="color:#000;font-weight:bold">,</span> 8<span style="color:#000;font-weight:bold">,</span> 1<span style="color:#000;font-weight:bold">,</span> 7<span style="color:#000;font-weight:bold">,</span> 4<span style="color:#000;font-weight:bold">,</span> 0<span style="color:#000;font-weight:bold">,</span> 5<span style="color:#000;font-weight:bold">,</span> 8<span style="color:#000;font-weight:bold">,</span> 7<span style="color:#000;font-weight:bold">,</span> 5<span style="color:#000;font-weight:bold">,</span> 9<span style="color:#000;font-weight:bold">,</span> 6<span style="color:#000;font-weight:bold">,</span> 4<span style="color:#000;font-weight:bold">,</span> 0<span style="color:#000;font-weight:bold">};</span>
+        sort2<span style="color:#000;font-weight:bold">(</span>array2<span style="color:#000;font-weight:bold">);</span>
+        System<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">out</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">println</span><span style="color:#000;font-weight:bold">(</span>Arrays<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">toString</span><span style="color:#000;font-weight:bold">(</span>array2<span style="color:#000;font-weight:bold">));</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#998;font-style:italic">// 按照从小到大排序
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">sort2</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">[]</span> array<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#000;font-weight:bold">for</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> 0<span style="color:#000;font-weight:bold">;</span> i <span style="color:#000;font-weight:bold">&lt;</span> array<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">length</span> <span style="color:#000;font-weight:bold">-</span> 1<span style="color:#000;font-weight:bold">;</span> i<span style="color:#000;font-weight:bold">++)</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#458;font-weight:bold">int</span> min <span style="color:#000;font-weight:bold">=</span> i<span style="color:#000;font-weight:bold">;</span> <span style="color:#998;font-style:italic">// 每一轮循环,先选择第一个数当成最小值
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#000;font-weight:bold">for</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> j <span style="color:#000;font-weight:bold">=</span> i <span style="color:#000;font-weight:bold">+</span> 1<span style="color:#000;font-weight:bold">;</span> j <span style="color:#000;font-weight:bold">&lt;</span> array<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">length</span><span style="color:#000;font-weight:bold">;</span> j<span style="color:#000;font-weight:bold">++)</span> <span style="color:#000;font-weight:bold">{</span>
+                <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>array<span style="color:#000;font-weight:bold">[</span>j<span style="color:#000;font-weight:bold">]</span> <span style="color:#000;font-weight:bold">&lt;</span> array<span style="color:#000;font-weight:bold">[</span>min<span style="color:#000;font-weight:bold">])</span> <span style="color:#000;font-weight:bold">{</span>
+                    min <span style="color:#000;font-weight:bold">=</span> j<span style="color:#000;font-weight:bold">;</span>
+                <span style="color:#000;font-weight:bold">}</span>
+            <span style="color:#000;font-weight:bold">}</span>
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>i <span style="color:#000;font-weight:bold">!=</span> min<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+                swap<span style="color:#000;font-weight:bold">(</span>array<span style="color:#000;font-weight:bold">,</span> i<span style="color:#000;font-weight:bold">,</span> min<span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000;font-weight:bold">}</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">swap</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">[]</span> array<span style="color:#000;font-weight:bold">,</span> <span style="color:#458;font-weight:bold">int</span> x<span style="color:#000;font-weight:bold">,</span> <span style="color:#458;font-weight:bold">int</span> y<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#458;font-weight:bold">int</span> temp <span style="color:#000;font-weight:bold">=</span> array<span style="color:#000;font-weight:bold">[</span>x<span style="color:#000;font-weight:bold">];</span>
+        array<span style="color:#000;font-weight:bold">[</span>x<span style="color:#000;font-weight:bold">]</span> <span style="color:#000;font-weight:bold">=</span> array<span style="color:#000;font-weight:bold">[</span>y<span style="color:#000;font-weight:bold">];</span>
+        array<span style="color:#000;font-weight:bold">[</span>y<span style="color:#000;font-weight:bold">]</span> <span style="color:#000;font-weight:bold">=</span> temp<span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h3 id="手写快速排序">手写快速排序</h3>
+<ul>
+<li>待补充</li>
+</ul>
+<h3 id="手写归并排序">手写归并排序</h3>
+<ul>
+<li>待补充</li>
+</ul>
+<h3 id="手写插入排序">手写插入排序</h3>
+<ul>
+<li>待补充</li>
+</ul>
+<h3 id="手写堆排序">手写堆排序</h3>
+<ul>
+<li>待补充</li>
+</ul>
+<h3 id="手写猴子排序">手写猴子排序</h3>
+<ul>
+<li>待补充</li>
+</ul>
+<h3 id="手写睡眠排序">手写睡眠排序</h3>
+<ul>
+<li>待补充</li>
+</ul>
+<h3 id="遍历二叉树">遍历二叉树</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">BinaryTree</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">TreeNode</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#458;font-weight:bold">int</span> value<span style="color:#000;font-weight:bold">;</span>
+        TreeNode left<span style="color:#000;font-weight:bold">;</span>
+        TreeNode right<span style="color:#000;font-weight:bold">;</span>
+
+        <span style="color:#000;font-weight:bold">public</span> <span style="color:#900;font-weight:bold">TreeNode</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> value<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000;font-weight:bold">this</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">value</span> <span style="color:#000;font-weight:bold">=</span> value<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+    
+    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">main</span><span style="color:#000;font-weight:bold">(</span>String<span style="color:#000;font-weight:bold">[]</span> args<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        TreeNode node1 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> TreeNode<span style="color:#000;font-weight:bold">(</span>1<span style="color:#000;font-weight:bold">);</span>
+        TreeNode node2 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> TreeNode<span style="color:#000;font-weight:bold">(</span>2<span style="color:#000;font-weight:bold">);</span>
+        TreeNode node3 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> TreeNode<span style="color:#000;font-weight:bold">(</span>3<span style="color:#000;font-weight:bold">);</span>
+        TreeNode node4 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> TreeNode<span style="color:#000;font-weight:bold">(</span>4<span style="color:#000;font-weight:bold">);</span>
+        TreeNode node5 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> TreeNode<span style="color:#000;font-weight:bold">(</span>5<span style="color:#000;font-weight:bold">);</span>
+        TreeNode node6 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> TreeNode<span style="color:#000;font-weight:bold">(</span>6<span style="color:#000;font-weight:bold">);</span>
+
+        node1<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">left</span> <span style="color:#000;font-weight:bold">=</span> node2<span style="color:#000;font-weight:bold">;</span>
+        node1<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">right</span> <span style="color:#000;font-weight:bold">=</span> node3<span style="color:#000;font-weight:bold">;</span>
+
+        node2<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">left</span> <span style="color:#000;font-weight:bold">=</span> node4<span style="color:#000;font-weight:bold">;</span>
+        node2<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">right</span> <span style="color:#000;font-weight:bold">=</span> node5<span style="color:#000;font-weight:bold">;</span>
+
+        node3<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">right</span> <span style="color:#000;font-weight:bold">=</span> node6<span style="color:#000;font-weight:bold">;</span>
+
+        System<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">out</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">println</span><span style="color:#000;font-weight:bold">(</span>bfs<span style="color:#000;font-weight:bold">(</span>node1<span style="color:#000;font-weight:bold">));</span>
+        System<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">out</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">println</span><span style="color:#000;font-weight:bold">(</span>dfs<span style="color:#000;font-weight:bold">(</span>node1<span style="color:#000;font-weight:bold">));</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#998;font-style:italic">// 请实现二叉树的广度优先遍历（层次遍历）
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> List<span style="color:#000;font-weight:bold">&lt;</span>Integer<span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#900;font-weight:bold">bfs</span><span style="color:#000;font-weight:bold">(</span>TreeNode root<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        List<span style="color:#000;font-weight:bold">&lt;</span>Integer<span style="color:#000;font-weight:bold">&gt;</span> result <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> ArrayList<span style="color:#000;font-weight:bold">&lt;&gt;();</span>
+        <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>root <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            result<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">add</span><span style="color:#000;font-weight:bold">(</span>root<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">value</span><span style="color:#000;font-weight:bold">);</span>
+            traverseLeafNode<span style="color:#000;font-weight:bold">(</span>root<span style="color:#000;font-weight:bold">,</span> result<span style="color:#000;font-weight:bold">);</span>
+        <span style="color:#000;font-weight:bold">}</span>
+        <span style="color:#000;font-weight:bold">return</span> result<span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#998;font-style:italic">// 请实现二叉树的深度优先遍历（前序）
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> List<span style="color:#000;font-weight:bold">&lt;</span>Integer<span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#900;font-weight:bold">dfs</span><span style="color:#000;font-weight:bold">(</span>TreeNode root<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        List<span style="color:#000;font-weight:bold">&lt;</span>Integer<span style="color:#000;font-weight:bold">&gt;</span> result <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> ArrayList<span style="color:#000;font-weight:bold">&lt;&gt;();</span>
+        <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>root <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            result<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">add</span><span style="color:#000;font-weight:bold">(</span>root<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">value</span><span style="color:#000;font-weight:bold">);</span>
+            result<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">addAll</span><span style="color:#000;font-weight:bold">(</span>dfs<span style="color:#000;font-weight:bold">(</span>root<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">left</span><span style="color:#000;font-weight:bold">));</span>
+            result<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">addAll</span><span style="color:#000;font-weight:bold">(</span>dfs<span style="color:#000;font-weight:bold">(</span>root<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">right</span><span style="color:#000;font-weight:bold">));</span>
+        <span style="color:#000;font-weight:bold">}</span>
+        <span style="color:#000;font-weight:bold">return</span> result<span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#000;font-weight:bold">}</span>
+    
+    <span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">traverseLeafNode</span><span style="color:#000;font-weight:bold">(</span>TreeNode root<span style="color:#000;font-weight:bold">,</span> List<span style="color:#000;font-weight:bold">&lt;</span>Integer<span style="color:#000;font-weight:bold">&gt;</span> result<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        Queue<span style="color:#000;font-weight:bold">&lt;</span>TreeNode<span style="color:#000;font-weight:bold">&gt;</span> nodes <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> ArrayDeque<span style="color:#000;font-weight:bold">&lt;&gt;();</span>
+        nodes<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">add</span><span style="color:#000;font-weight:bold">(</span>root<span style="color:#000;font-weight:bold">);</span>
+        <span style="color:#000;font-weight:bold">while</span> <span style="color:#000;font-weight:bold">(!</span>nodes<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">isEmpty</span><span style="color:#000;font-weight:bold">())</span> <span style="color:#000;font-weight:bold">{</span>
+            TreeNode node <span style="color:#000;font-weight:bold">=</span> nodes<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">poll</span><span style="color:#000;font-weight:bold">();</span>
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>node<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">left</span> <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+                nodes<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">add</span><span style="color:#000;font-weight:bold">(</span>node<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">left</span><span style="color:#000;font-weight:bold">);</span>
+                result<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">add</span><span style="color:#000;font-weight:bold">(</span>node<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">left</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">value</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000;font-weight:bold">}</span>
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>node<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">right</span> <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+                nodes<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">add</span><span style="color:#000;font-weight:bold">(</span>node<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">right</span><span style="color:#000;font-weight:bold">);</span>
+                result<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">add</span><span style="color:#000;font-weight:bold">(</span>node<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">right</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">value</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000;font-weight:bold">}</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h3 id="手写双向链表">手写双向链表</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Main</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Node</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#000;font-weight:bold">private</span> Object value<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">private</span> Node next<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">private</span> Node prev<span style="color:#000;font-weight:bold">;</span>
+
+        <span style="color:#000;font-weight:bold">public</span> <span style="color:#900;font-weight:bold">Node</span><span style="color:#000;font-weight:bold">(</span>Object value<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000;font-weight:bold">this</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">value</span> <span style="color:#000;font-weight:bold">=</span> value<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+
+        <span style="color:#000;font-weight:bold">public</span> Object <span style="color:#900;font-weight:bold">getValue</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000;font-weight:bold">return</span> value<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+
+        <span style="color:#000;font-weight:bold">public</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">setValue</span><span style="color:#000;font-weight:bold">(</span>Object value<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000;font-weight:bold">this</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">value</span> <span style="color:#000;font-weight:bold">=</span> value<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+
+        <span style="color:#000;font-weight:bold">public</span> Node <span style="color:#900;font-weight:bold">getNext</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000;font-weight:bold">return</span> next<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+
+        <span style="color:#000;font-weight:bold">public</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">setNext</span><span style="color:#000;font-weight:bold">(</span>Node next<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000;font-weight:bold">this</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span> <span style="color:#000;font-weight:bold">=</span> next<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+
+        <span style="color:#000;font-weight:bold">public</span> Node <span style="color:#900;font-weight:bold">getPrev</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000;font-weight:bold">return</span> prev<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+
+        <span style="color:#000;font-weight:bold">public</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">setPrev</span><span style="color:#000;font-weight:bold">(</span>Node prev<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000;font-weight:bold">this</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">prev</span> <span style="color:#000;font-weight:bold">=</span> prev<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">main</span><span style="color:#000;font-weight:bold">(</span>String<span style="color:#000;font-weight:bold">[]</span> args<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        Node head <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> Node<span style="color:#000;font-weight:bold">(</span>1<span style="color:#000;font-weight:bold">);</span>
+        Node second <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> Node<span style="color:#000;font-weight:bold">(</span>2<span style="color:#000;font-weight:bold">);</span>
+        Node third <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> Node<span style="color:#000;font-weight:bold">(</span>3<span style="color:#000;font-weight:bold">);</span>
+
+        <span style="color:#998;font-style:italic">// 链表的设置
+</span><span style="color:#998;font-style:italic"></span>        head<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">setPrev</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">);</span>
+        head<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">setNext</span><span style="color:#000;font-weight:bold">(</span>second<span style="color:#000;font-weight:bold">);</span>
+        second<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">setPrev</span><span style="color:#000;font-weight:bold">(</span>head<span style="color:#000;font-weight:bold">);</span>
+        second<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">setNext</span><span style="color:#000;font-weight:bold">(</span>third<span style="color:#000;font-weight:bold">);</span>
+        third<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">setPrev</span><span style="color:#000;font-weight:bold">(</span>second<span style="color:#000;font-weight:bold">);</span>
+        third<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">setNext</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">);</span>
+
+        <span style="color:#998;font-style:italic">// 链表的遍历
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#000;font-weight:bold">for</span> <span style="color:#000;font-weight:bold">(</span>Node current <span style="color:#000;font-weight:bold">=</span> head<span style="color:#000;font-weight:bold">;</span> current <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">;</span> current <span style="color:#000;font-weight:bold">=</span> current<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getNext</span><span style="color:#000;font-weight:bold">())</span> <span style="color:#000;font-weight:bold">{</span>
+            System<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">out</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">println</span><span style="color:#000;font-weight:bold">((</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">)</span> current<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getValue</span><span style="color:#000;font-weight:bold">());</span>
+        <span style="color:#000;font-weight:bold">}</span>
+
+        <span style="color:#998;font-style:italic">// 链表的删除,删除second节点
+</span><span style="color:#998;font-style:italic"></span>        second<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getPrev</span><span style="color:#000;font-weight:bold">().</span><span style="color:#008080">setNext</span><span style="color:#000;font-weight:bold">(</span>second<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getNext</span><span style="color:#000;font-weight:bold">());</span>
+        second<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getNext</span><span style="color:#000;font-weight:bold">().</span><span style="color:#008080">setPrev</span><span style="color:#000;font-weight:bold">(</span>second<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getPrev</span><span style="color:#000;font-weight:bold">());</span>
+           
+        <span style="color:#998;font-style:italic">// 再次遍历
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#000;font-weight:bold">for</span> <span style="color:#000;font-weight:bold">(</span>Node current <span style="color:#000;font-weight:bold">=</span> head<span style="color:#000;font-weight:bold">;</span> current <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">;</span> current <span style="color:#000;font-weight:bold">=</span> current<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getNext</span><span style="color:#000;font-weight:bold">())</span> <span style="color:#000;font-weight:bold">{</span>
+            System<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">out</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">println</span><span style="color:#000;font-weight:bold">((</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">)</span> current<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getValue</span><span style="color:#000;font-weight:bold">());</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h3 id="原地翻转一个单链表">原地翻转一个单链表</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">ReverseLinkedList</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">main</span><span style="color:#000;font-weight:bold">(</span>String<span style="color:#000;font-weight:bold">[]</span> args<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        Node node1 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> Node<span style="color:#000;font-weight:bold">(</span>1<span style="color:#000;font-weight:bold">);</span>
+        Node node2 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> Node<span style="color:#000;font-weight:bold">(</span>2<span style="color:#000;font-weight:bold">);</span>
+        node1<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span> <span style="color:#000;font-weight:bold">=</span> node2<span style="color:#000;font-weight:bold">;</span>
+        Node node3 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> Node<span style="color:#000;font-weight:bold">(</span>3<span style="color:#000;font-weight:bold">);</span>
+        node2<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span> <span style="color:#000;font-weight:bold">=</span> node3<span style="color:#000;font-weight:bold">;</span>
+        Node node4 <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> Node<span style="color:#000;font-weight:bold">(</span>4<span style="color:#000;font-weight:bold">);</span>
+        node3<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span> <span style="color:#000;font-weight:bold">=</span> node4<span style="color:#000;font-weight:bold">;</span>
+
+        print<span style="color:#000;font-weight:bold">(</span>node1<span style="color:#000;font-weight:bold">);</span>
+        print<span style="color:#000;font-weight:bold">(</span>reverse<span style="color:#000;font-weight:bold">(</span>node1<span style="color:#000;font-weight:bold">));</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#998;font-style:italic">// 原地翻转一个单链表
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#998;font-style:italic">// 传递的参数是原始链表的头节点
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#998;font-style:italic">// 返回翻转后的链表的头节点
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> Node <span style="color:#900;font-weight:bold">reverse</span><span style="color:#000;font-weight:bold">(</span>Node head<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>head <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span> <span style="color:#000;font-weight:bold">&amp;&amp;</span> head<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span> <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            Node newHead <span style="color:#000;font-weight:bold">=</span> reverse<span style="color:#000;font-weight:bold">(</span>head<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span><span style="color:#000;font-weight:bold">);</span> <span style="color:#998;font-style:italic">// 一通操作,就进入到了链表的倒数第二个元素
+</span><span style="color:#998;font-style:italic"></span>            head<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span> <span style="color:#000;font-weight:bold">=</span> head<span style="color:#000;font-weight:bold">;</span> <span style="color:#998;font-style:italic">// 把它的下一个元素设置成头节点
+</span><span style="color:#998;font-style:italic"></span>            head<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">;</span> <span style="color:#998;font-style:italic">// 再把头节点的下一个元素设置为空
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#000;font-weight:bold">return</span> newHead<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+        <span style="color:#000;font-weight:bold">return</span> head<span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Node</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#458;font-weight:bold">int</span> value<span style="color:#000;font-weight:bold">;</span>
+        Node next<span style="color:#000;font-weight:bold">;</span>
+
+        <span style="color:#000;font-weight:bold">public</span> <span style="color:#900;font-weight:bold">Node</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> value<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000;font-weight:bold">this</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">value</span> <span style="color:#000;font-weight:bold">=</span> value<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">print</span><span style="color:#000;font-weight:bold">(</span>Node head<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        Node current <span style="color:#000;font-weight:bold">=</span> head<span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">while</span> <span style="color:#000;font-weight:bold">(</span>current <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            System<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">out</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">print</span><span style="color:#000;font-weight:bold">(</span>current<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">value</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>current<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span> <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">null</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+                System<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">out</span><span style="color:#000;font-weight:bold">.</span><span style="color:#008080">print</span><span style="color:#000;font-weight:bold">(</span><span style="color:#d14">&#34;-&gt;&#34;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000;font-weight:bold">}</span>
+            current <span style="color:#000;font-weight:bold">=</span> current<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span><span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h3 id="手写一个stack栈">手写一个Stack(栈)</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">java.util.ArrayList</span><span style="color:#000;font-weight:bold">;</span>
+<span style="color:#000;font-weight:bold">import</span> <span style="color:#555">java.util.List</span><span style="color:#000;font-weight:bold">;</span>
+
+<span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Stack</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#000;font-weight:bold">final</span> List<span style="color:#000;font-weight:bold">&lt;</span>Integer<span style="color:#000;font-weight:bold">&gt;</span> list <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> ArrayList<span style="color:#000;font-weight:bold">&lt;&gt;();</span>
+
+    <span style="color:#998;font-style:italic">// 将一个元素压入栈内
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">public</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">push</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> value<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        list<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">add</span><span style="color:#000;font-weight:bold">(</span>value<span style="color:#000;font-weight:bold">);</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#998;font-style:italic">// 从栈顶弹出一个元素
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">public</span> <span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">pop</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#000;font-weight:bold">return</span> list<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">remove</span><span style="color:#000;font-weight:bold">(</span>list<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">size</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">-</span>1<span style="color:#000;font-weight:bold">);</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h3 id="手写一个queue队列">手写一个Queue(队列)</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">java.util.ArrayList</span><span style="color:#000;font-weight:bold">;</span>
+<span style="color:#000;font-weight:bold">import</span> <span style="color:#555">java.util.List</span><span style="color:#000;font-weight:bold">;</span>
+
+<span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Queue</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#000;font-weight:bold">final</span> List<span style="color:#000;font-weight:bold">&lt;</span>Integer<span style="color:#000;font-weight:bold">&gt;</span> list <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> ArrayList<span style="color:#000;font-weight:bold">&lt;&gt;();</span>
+
+    <span style="color:#998;font-style:italic">// 将一个元素添加到队列尾部
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">public</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">add</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> value<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        list<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">add</span><span style="color:#000;font-weight:bold">(</span>value<span style="color:#000;font-weight:bold">);</span>
+
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#998;font-style:italic">// 将一个元素从队列头部移走
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">public</span> <span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">remove</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#000;font-weight:bold">return</span> list<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">remove</span><span style="color:#000;font-weight:bold">(</span>0<span style="color:#000;font-weight:bold">);</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h2 id="hashmap实现原理">HashMap实现原理</h2>
+<h3 id="java-7">Java 7</h3>
+<h4 id="底层实现是数组链表">底层实现是数组+链表</h4>
+<ul>
+<li>为什么使用数组+链表?</li>
+</ul>
+<p>答: 因为这是当时大学论文中最经典的实现</p>
+<h4 id="默认容量16">默认容量<code>16</code></h4>
+<ul>
+<li>默认容量必须是2的幂(2的n次方)),为什么?</li>
+</ul>
+<p>答: 因为它需要计算未来丢进来的元素应该被放到哪个桶里,比如你现在有16个桶<br>
+在源码中有这么一个函数,它拿这个元素的哈希值按位与上一个桶的数量(容量)-1<br>
+这样就能够计算出它应该被放在哪个桶里(这个元素对应的数组下标),<br>
+在哈希表中的对应下标,你可以把它看成一个数组</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">indexFor</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> h<span style="color:#000;font-weight:bold">,</span> <span style="color:#458;font-weight:bold">int</span> length<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#998;font-style:italic">// Hash value of key &amp; (array length - 1)
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">return</span> h <span style="color:#000;font-weight:bold">&amp;</span> <span style="color:#000;font-weight:bold">(</span>length<span style="color:#000;font-weight:bold">-</span>1<span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><p>那么为什么默认容量必须是2的n次方呢?从下图我们可以看到,因为只有它的长度是<br>
+2的n次方的时候,才能保证对它-1操作拿到的全部是1的值(二进制),这样对它按位<br>
+与,才能够非常快速的计算出它的数组下标(桶),并且它的分布还是均匀的
+<img src="/image/exp-java-day22/hashMap/01.png" alt="HashMap默认容量"></p>
+<ul>
+<li>如果你给的默认容量不是2的n次方会怎么样?</li>
+</ul>
+<p>它会给你默认向上取整成2的n次方,如下源码所示</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">roundUpToPowerOf2</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> number<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#998;font-style:italic">// assert number &gt;= 0 : &#34;number must be non-negative&#34;;
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">return</span> number <span style="color:#000;font-weight:bold">&gt;=</span> MAXIMUM_CAPACITY
+            <span style="color:#000;font-weight:bold">?</span> MAXIMUM_CAPACITY
+            <span style="color:#000;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">(</span>number <span style="color:#000;font-weight:bold">&gt;</span> 1<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">?</span> Integer<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">highestOneBit</span><span style="color:#000;font-weight:bold">((</span>number <span style="color:#000;font-weight:bold">-</span> 1<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> 1<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">:</span> 1<span style="color:#000;font-weight:bold">;</span>
+<span style="color:#000;font-weight:bold">}</span>
+
+<span style="color:#000;font-weight:bold">private</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">inflateTable</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> toSize<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#998;font-style:italic">// Find a power of 2 &gt;= toSize
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#458;font-weight:bold">int</span> capacity <span style="color:#000;font-weight:bold">=</span> roundUpToPowerOf2<span style="color:#000;font-weight:bold">(</span>toSize<span style="color:#000;font-weight:bold">);</span>
+    threshold <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">)</span> Math<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">min</span><span style="color:#000;font-weight:bold">(</span>capacity <span style="color:#000;font-weight:bold">*</span> loadFactor<span style="color:#000;font-weight:bold">,</span> MAXIMUM_CAPACITY <span style="color:#000;font-weight:bold">+</span> 1<span style="color:#000;font-weight:bold">);</span>
+    table <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> Entry<span style="color:#000;font-weight:bold">[</span>capacity<span style="color:#000;font-weight:bold">];</span>
+    initHashSeedAsNeeded<span style="color:#000;font-weight:bold">(</span>capacity<span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h4 id="负载因素075f">负载因素<code>0.75f</code></h4>
+<ul>
+<li>用于衡量什么时候该扩容</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000;font-weight:bold">static</span> <span style="color:#000;font-weight:bold">final</span> <span style="color:#458;font-weight:bold">float</span> DEFAULT_LOAD_FACTOR <span style="color:#000;font-weight:bold">=</span> 0<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">75f</span><span style="color:#000;font-weight:bold">;</span>
+</code></pre></div><h4 id="什么时候扩容">什么时候扩容?</h4>
+<ul>
+<li>当元素个数超过<code>容量*负载因素</code>时就开始扩容,例如默认容量<code>16 * 0.75 = 12</code>那么它会在超过12个元素时给你扩容</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">addEntry</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> hash<span style="color:#000;font-weight:bold">,</span> K key<span style="color:#000;font-weight:bold">,</span> V value<span style="color:#000;font-weight:bold">,</span> <span style="color:#458;font-weight:bold">int</span> bucketIndex<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#998;font-style:italic">// threshold 阈值 = 容量 * 负载因素
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">((</span>size <span style="color:#000;font-weight:bold">&gt;=</span> threshold<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">&amp;&amp;</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000;font-weight:bold">null</span> <span style="color:#000;font-weight:bold">!=</span> table<span style="color:#000;font-weight:bold">[</span>bucketIndex<span style="color:#000;font-weight:bold">]))</span> <span style="color:#000;font-weight:bold">{</span>
+        resize<span style="color:#000;font-weight:bold">(</span>2 <span style="color:#000;font-weight:bold">*</span> table<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">length</span><span style="color:#000;font-weight:bold">);</span>
+        hash <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000;font-weight:bold">null</span> <span style="color:#000;font-weight:bold">!=</span> key<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">?</span> hash<span style="color:#000;font-weight:bold">(</span>key<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">:</span> 0<span style="color:#000;font-weight:bold">;</span>
+        bucketIndex <span style="color:#000;font-weight:bold">=</span> indexFor<span style="color:#000;font-weight:bold">(</span>hash<span style="color:#000;font-weight:bold">,</span> table<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">length</span><span style="color:#000;font-weight:bold">);</span>
+    <span style="color:#000;font-weight:bold">}</span>
+    createEntry<span style="color:#000;font-weight:bold">(</span>hash<span style="color:#000;font-weight:bold">,</span> key<span style="color:#000;font-weight:bold">,</span> value<span style="color:#000;font-weight:bold">,</span> bucketIndex<span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h4 id="如何扩容">如何扩容?</h4>
+<p>对所有的元素重新计算哈希值,然后把它们都重新移动到新的哈希表中,新的容量是旧的容量的2倍</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">resize</span><span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span> newCapacity<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+    Entry<span style="color:#000;font-weight:bold">[]</span> oldTable <span style="color:#000;font-weight:bold">=</span> table<span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#458;font-weight:bold">int</span> oldCapacity <span style="color:#000;font-weight:bold">=</span> oldTable<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">length</span><span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>oldCapacity <span style="color:#000;font-weight:bold">==</span> MAXIMUM_CAPACITY<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        threshold <span style="color:#000;font-weight:bold">=</span> Integer<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">MAX_VALUE</span><span style="color:#000;font-weight:bold">;</span>
+        <span style="color:#000;font-weight:bold">return</span><span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#998;font-style:italic">//The above code is to record the old array table and save it
+</span><span style="color:#998;font-style:italic"></span>	<span style="color:#998;font-style:italic">//Create a new 32 capacity array newTable 
+</span><span style="color:#998;font-style:italic"></span>    Entry<span style="color:#000;font-weight:bold">[]</span> newTable <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> Entry<span style="color:#000;font-weight:bold">[</span>newCapacity<span style="color:#000;font-weight:bold">];</span>
+    <span style="color:#998;font-style:italic">//Put the elements on the oldTable on the newTable to complete the array transfer
+</span><span style="color:#998;font-style:italic"></span>    transfer<span style="color:#000;font-weight:bold">(</span>newTable<span style="color:#000;font-weight:bold">,</span> initHashSeedAsNeeded<span style="color:#000;font-weight:bold">(</span>newCapacity<span style="color:#000;font-weight:bold">));</span>
+    <span style="color:#998;font-style:italic">//Assign new array to old array after transfer
+</span><span style="color:#998;font-style:italic"></span>    table <span style="color:#000;font-weight:bold">=</span> newTable<span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#998;font-style:italic">//Recalculate threshold 32 * 0.75
+</span><span style="color:#998;font-style:italic"></span>    threshold <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#458;font-weight:bold">int</span><span style="color:#000;font-weight:bold">)</span>Math<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">min</span><span style="color:#000;font-weight:bold">(</span>newCapacity <span style="color:#000;font-weight:bold">*</span> loadFactor<span style="color:#000;font-weight:bold">,</span> MAXIMUM_CAPACITY <span style="color:#000;font-weight:bold">+</span> 1<span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h4 id="resize方法中的transfer方法是一切问题的根源">resize()方法中的transfer()方法是一切问题的根源</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">transfer</span><span style="color:#000;font-weight:bold">(</span>Entry<span style="color:#000;font-weight:bold">[]</span> newTable<span style="color:#000;font-weight:bold">,</span> <span style="color:#458;font-weight:bold">boolean</span> rehash<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#458;font-weight:bold">int</span> newCapacity <span style="color:#000;font-weight:bold">=</span> newTable<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">length</span><span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#998;font-style:italic">// 遍历旧表里的每一个桶
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">for</span> <span style="color:#000;font-weight:bold">(</span>Entry<span style="color:#000;font-weight:bold">&lt;</span>K<span style="color:#000;font-weight:bold">,</span>V<span style="color:#000;font-weight:bold">&gt;</span> e <span style="color:#000;font-weight:bold">:</span> table<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#000;font-weight:bold">while</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000;font-weight:bold">null</span> <span style="color:#000;font-weight:bold">!=</span> e<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#998;font-style:italic">// 用 next 取得要转移那个元素的下一个,
+</span><span style="color:#998;font-style:italic"></span>            Entry<span style="color:#000;font-weight:bold">&lt;</span>K<span style="color:#000;font-weight:bold">,</span>V<span style="color:#000;font-weight:bold">&gt;</span> next <span style="color:#000;font-weight:bold">=</span> e<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span><span style="color:#000;font-weight:bold">;</span>
+            <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>rehash<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+                e<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">hash</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">null</span> <span style="color:#000;font-weight:bold">==</span> e<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">key</span> <span style="color:#000;font-weight:bold">?</span> 0 <span style="color:#000;font-weight:bold">:</span> hash<span style="color:#000;font-weight:bold">(</span>e<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">key</span><span style="color:#000;font-weight:bold">);</span> <span style="color:#998;font-style:italic">// 计算新的hash值
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#000;font-weight:bold">}</span>
+            <span style="color:#998;font-style:italic">// 然后看看 e 在新表中的什么地方
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#458;font-weight:bold">int</span> i <span style="color:#000;font-weight:bold">=</span> indexFor<span style="color:#000;font-weight:bold">(</span>e<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">hash</span><span style="color:#000;font-weight:bold">,</span> newCapacity<span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#998;font-style:italic">// 把 e 的下一个元素设置为新表中对应位置的节点
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#998;font-style:italic">// 如果没有发生碰撞,那么这个节点为null,当发生碰撞时,next就会链接到已存在的节点上
+</span><span style="color:#998;font-style:italic"></span>            <span style="color:#998;font-style:italic">// 这是一个典型的链表结构
+</span><span style="color:#998;font-style:italic"></span>            e<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">next</span> <span style="color:#000;font-weight:bold">=</span> newTable<span style="color:#000;font-weight:bold">[</span>i<span style="color:#000;font-weight:bold">];</span>
+            <span style="color:#998;font-style:italic">// 将 e 转移到新哈希表的头部,使用头插法插入节点 
+</span><span style="color:#998;font-style:italic"></span>            newTable<span style="color:#000;font-weight:bold">[</span>i<span style="color:#000;font-weight:bold">]</span> <span style="color:#000;font-weight:bold">=</span> e<span style="color:#000;font-weight:bold">;</span>
+            e <span style="color:#000;font-weight:bold">=</span> next<span style="color:#000;font-weight:bold">;</span>
+            <span style="color:#998;font-style:italic">// 经过这几步会发现转移的时候是逆序的, A-&gt;B-&gt;C迁移后会变成C-&gt;B-&gt;A，HashMap 的死锁问题就出在这个transfer()函数上
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><h4 id="java-7-hashmap存在的问题">Java 7 HashMap存在的问题</h4>
+<ul>
+<li>并发环境中容易死锁
+<ul>
+<li><a href="https://coolshell.cn/articles/9606.html">CoolShell-HashMap死循环问题参考</a></li>
+</ul>
+</li>
+<li>潜在的安全隐患
+<ul>
+<li><a href="https://mail-archives.apache.org/mod_mbox/tomcat-announce/201112.mbox/%3C4EFB9800.5010106@apache.org%3E">CVE-2011-4858</a></li>
+<li>可以通过精心构造的恶意请求引发DOS攻击</li>
+</ul>
+</li>
+</ul>
+<h3 id="java-8-hashmap-对-java-7-hashmap-的改进">Java 8 HashMap 对 Java 7 HashMap 的改进</h3>
+<h4 id="数据结构由之前的数组链表改成了数组红黑树">数据结构由之前的数组+链表,改成了数组+红黑树</h4>
+<p>Java 8 的 HashMap 中开头就有这样几段注释说明</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#998;font-style:italic">/*
+</span><span style="color:#998;font-style:italic"> * Implementation notes.
+</span><span style="color:#998;font-style:italic"> *
+</span><span style="color:#998;font-style:italic"> * This map usually acts as a binned (bucketed) hash table, but
+</span><span style="color:#998;font-style:italic"> * when bins get too large, they are transformed into bins of
+</span><span style="color:#998;font-style:italic"> * TreeNodes, each structured similarly to those in
+</span><span style="color:#998;font-style:italic"> * java.util.TreeMap. Most methods try to use normal bins,
+</span><span style="color:#998;font-style:italic"> * ......
+</span><span style="color:#998;font-style:italic"> * 这个Map通常使用的是基于桶的Hash表,但是,当这个桶变得特别大的时候,
+</span><span style="color:#998;font-style:italic"> * 它们会被转化成TreeNodes的桶,其中每一个TreeNode都和TreeMap相似(红黑树)
+</span><span style="color:#998;font-style:italic"> * 绝大多数情况下,都会尝试使用正常的桶
+</span><span style="color:#998;font-style:italic">*/</span>
+
+<span style="color:#998;font-style:italic">/*
+</span><span style="color:#998;font-style:italic"> * Because TreeNodes are about twice the size of regular nodes, we
+</span><span style="color:#998;font-style:italic"> * use them only when bins contain enough nodes to warrant use
+</span><span style="color:#998;font-style:italic"> * (see TREEIFY_THRESHOLD). And when they become too small (due to
+</span><span style="color:#998;font-style:italic"> * removal or resizing) they are converted back to plain bins.  In
+</span><span style="color:#998;font-style:italic"> * usages with well-distributed user hashCodes, tree bins are
+</span><span style="color:#998;font-style:italic"> * rarely used.  Ideally, under random hashCodes, the frequency of
+</span><span style="color:#998;font-style:italic"> * nodes in bins follows a Poisson distribution
+</span><span style="color:#998;font-style:italic"> * (http://en.wikipedia.org/wiki/Poisson_distribution) with a
+</span><span style="color:#998;font-style:italic"> * parameter of about 0.5 on average for the default resizing
+</span><span style="color:#998;font-style:italic"> * threshold of 0.75, although with a large variance because of
+</span><span style="color:#998;font-style:italic"> * resizing granularity. Ignoring variance, the expected
+</span><span style="color:#998;font-style:italic"> * occurrences of list size k are (exp(-0.5) * pow(0.5, k) /
+</span><span style="color:#998;font-style:italic"> * factorial(k)). The first values are:
+</span><span style="color:#998;font-style:italic"> *
+</span><span style="color:#998;font-style:italic"> * 0:    0.60653066
+</span><span style="color:#998;font-style:italic"> * 1:    0.30326533
+</span><span style="color:#998;font-style:italic"> * 2:    0.07581633
+</span><span style="color:#998;font-style:italic"> * 3:    0.01263606
+</span><span style="color:#998;font-style:italic"> * 4:    0.00157952
+</span><span style="color:#998;font-style:italic"> * 5:    0.00015795
+</span><span style="color:#998;font-style:italic"> * 6:    0.00001316
+</span><span style="color:#998;font-style:italic"> * 7:    0.00000094
+</span><span style="color:#998;font-style:italic"> * 8:    0.00000006
+</span><span style="color:#998;font-style:italic"> * more: less than 1 in ten million
+</span><span style="color:#998;font-style:italic"> *
+</span><span style="color:#998;font-style:italic"> * 因为红黑树的树节点是常规节点的几乎两倍大,所以我们只有在这个桶里有足够多的元素的时候
+</span><span style="color:#998;font-style:italic"> * 才会使用它们,请参看 TREEIFY_THRESHOLD(转化成树的阈值),当它们变得特别小的时候
+</span><span style="color:#998;font-style:italic"> * 它们会被转化回基于链表的桶,如果用户的 hashCode 分布非常均匀的话,那么基于红黑树的桶
+</span><span style="color:#998;font-style:italic"> * 很少被用到,理想情况下,在完全随机的 hashCode 的实现中的时候,这个桶中的节点的分布遵从
+</span><span style="color:#998;font-style:italic"> * 泊松分布(http://en.wikipedia.org/wiki/Poisson_distribution),它们服从参数是0.5
+</span><span style="color:#998;font-style:italic"> * 的泊松分布
+</span><span style="color:#998;font-style:italic"> */</span>
+<span style="color:#000;font-weight:bold">static</span> <span style="color:#000;font-weight:bold">final</span> <span style="color:#458;font-weight:bold">int</span> TREEIFY_THRESHOLD <span style="color:#000;font-weight:bold">=</span> 8<span style="color:#000;font-weight:bold">;</span>
+</code></pre></div><h4 id="为什么转化成红黑树的阈值是8">为什么转化成红黑树的阈值是<code>8</code>?</h4>
+<ul>
+<li>因为它们遵从<a href="http://en.wikipedia.org/wiki/Poisson_distribution">泊松分布</a>, 在一个桶里由8个元素的概率是0.00000006,如果这个概率都达到了,那么就应该转化成红黑树了</li>
+</ul>
+<h4 id="resize-调整大小时保持了顺序避免了并发环境下的环形链接的产生">resize 调整大小时,保持了顺序,避免了并发环境下的环形链接的产生</h4>
+<p>但这并不意味着<code>Java 8</code>中的<code>HashMap</code>就是<code>完美的</code>,它一样是<code>线程不安全的</code>,这一点要谨记</p>
+
+    </div>
+  </article>
+
+  
+  
+
+
+
+
+  <div class="blog-post-comments">
+    
+      <div id="disquss_thread">
+  <script src="https://utteranc.es/client.js"
+    repo="Wjinlei/wjinlei.github.io"
+    issue-term="pathname"
+    label="Wjinlei"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
+    
+  </div>
+
+
+
+  <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/posts">Writings</a></li>
+         
+          <li><a href="/tags">Tags</a></li>
+         
+          <li><a href="/about">About</a></li>
+        
+      </ul>
+    </div>
+
+    
+
+    <div id="share-footer" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f" aria-label="Facebook">
+      <i class="fab fa-facebook fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&text=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="Twitter">
+      <i class="fab fa-twitter fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="Linkedin">
+      <i class="fab fa-linkedin fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&is_video=false&description=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="Pinterest">
+      <i class="fab fa-pinterest fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29&body=Check out this article: https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f" aria-label="Email">
+      <i class="fas fa-envelope fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="Pocket">
+      <i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="reddit">
+      <i class="fab fa-reddit fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&name=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29&description=%e7%ae%97%e6%b3%95%20%e5%85%b3%e4%ba%8e%e7%ae%97%e6%b3%95%e5%a4%8d%e6%9d%82%e5%ba%a6%20%20O%281%29%20%e5%b8%b8%e6%95%b0%e6%97%b6%e9%97%b4%20%20%e6%97%a0%e8%ae%ba%e9%97%ae%e9%a2%98%e7%9a%84%e8%a7%84%e6%a8%a1%e6%9c%89%e5%a4%9a%e5%a4%a7%2c%e6%80%bb%e8%83%bd%e5%9c%a8%e5%9b%ba%e5%ae%9a%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%90%8e%e5%b0%b1%e8%83%bd%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%2c%e4%bb%a3%e8%a1%a8%e7%ae%97%e6%b3%95%e6%9c%89%e5%93%88%e5%b8%8c%e6%a1%b6%2c%e6%95%b0%e7%bb%84%e7%9a%84%e9%9a%8f%e6%9c%ba%e5%af%bb%e5%9d%80%20%20O%28n%29%20%e7%ba%bf%e6%80%a7%e6%97%b6%e9%97%b4%20%20%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e9%97%ae%e9%a2%98%e8%a7%84%e6%a8%a1%e6%88%90%e6%ad%a3%e6%af%94%2c%e9%97%ae%e9%a2%98%e8%a7%84%e6%a8%a1%e8%b6%8a%e5%a4%a7%2c%e9%9c%80%e8%a6%81%e7%9a%84%e6%97%b6%e9%97%b4%e8%b6%8a%e9%95%bf%2c%e4%bb%a3%e8%a1%a8%e7%ae%97%e6%b3%95%e6%98%af%e9%81%8d%e5%8e%86%20%20O%28log%28n%29%29%20%e5%af%b9%e6%95%b0%e6%97%b6%e9%97%b4%20%20%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e9%97%ae%e9%a2%98%e7%9a%84%e5%af%b9%e6%95%b0%e6%88%90%e6%ad%a3%e6%af%94%2c%e6%af%8f1%e6%ac%a1%e6%93%8d%e4%bd%9c%2c%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%e7%9a%84%e6%97%b6%e9%97%b4%e6%88%90%e5%80%8d%e5%87%8f%e5%b0%91%2c%e4%bb%a3%e8%a1%a8%e7%ae%97%e6%b3%95%e6%9c%89%e4%ba%8c%e5%88%86%e6%9f%a5%e6%89%be%2c%e4%ba%8c%e5%8f%89%e6%a0%91%20%20O%28n%2alog%28n%29%29%20%e5%9f%ba%e4%ba%8e%e6%af%94%e8%be%83%e7%9a%84%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95%e7%9a%84%e4%b8%8b%e9%99%90%20%20%e5%be%85Google%20%20O%28n%5e2%29%20%e5%b9%b3%e6%96%b9%e6%97%b6%e9%97%b4%20%20%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e9%97%ae%e9%a2%98%e7%9a%84%e5%b9%b3%e6%96%b9%e6%88%90%e6%ad%a3%e6%af%94%2c%e6%af%8f1%e6%ac%a1%e6%93%8d%e4%bd%9c%2c%e8%a7%a3%e5%86%b3%e9%97%ae%e9%a2%98%e7%9a%84%e6%97%b6%e9%97%b4%e6%88%90%e5%80%8d%e5%a2%9e%e5%8a%a0%2c%e4%bb%a3%e8%a1%a8%e7%ae%97%e6%b3%95%e6%9c%89%e5%86%92%e6%b3%a1%e6%8e%92%e5%ba%8f%20%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%20%e7%a8%8b%e5%ba%8f%3d%e7%ae%97%e6%b3%95%2b%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%0a%e5%9f%ba%e6%9c%ac%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%20%20%20%e6%95%b0%e7%bb%84%0a%20%e6%95%b0%e7%bb%84%e7%9a%84%e5%af%bb%e5%9d%80%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e7%9a%84%e5%af%bb%e5%9d%80%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e5%af%bb%e5%9d%80%e5%b0%b1%e8%83%bd%e5%be%97%e5%88%b0%e6%83%b3%e8%a6%81%e7%9a%84%e6%95%b0%e6%8d%ae%2c%e6%88%91%e4%bb%ac%e7%a7%b0%e4%b8%ba%e9%9a%8f%e6%9c%ba%e8%ae%bf%e9%97%ae%28RandomAccess%29%20%e6%95%b0%e7%bb%84%e7%9a%84%e6%8f%92%e5%85%a5%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e7%ba%bf%e6%80%a7%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e6%af%8f%e6%ac%a1%e6%8f%92%e5%85%a51%e4%b8%aa%e5%85%83%e7%b4%a0%e9%83%bd%e5%bf%85%e9%a1%bb%e8%ae%a9%e5%85%b6%e5%90%8e%e7%9a%84%e5%85%83%e7%b4%a0%e5%90%91%e5%90%8e%e7%a7%bb1%e4%bd%8d%2c%e5%9b%a0%e6%ad%a4%e6%8f%92%e5%85%a5%e6%93%8d%e4%bd%9c%e6%89%80%e9%9c%80%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e6%95%b0%e7%bb%84%e9%95%bf%e5%ba%a6%e6%88%90%e6%ad%a3%e6%af%94%20%e6%95%b0%e7%bb%84%e7%9a%84%e5%88%a0%e9%99%a4%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e7%ba%bf%e6%80%a7%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e6%af%8f%e6%ac%a1%e5%88%a0%e9%99%a41%e4%b8%aa%e5%85%83%e7%b4%a0%e9%83%bd%e5%bf%85%e9%a1%bb%e8%ae%a9%e5%85%b6%e5%90%8e%e7%9a%84%e5%85%83%e7%b4%a0%e5%90%91%e5%89%8d%e7%a7%bb1%e4%bd%8d%2c%e5%9b%a0%e6%ad%a4%e5%88%a0%e9%99%a4%e6%93%8d%e4%bd%9c%e6%89%80%e9%9c%80%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e6%95%b0%e7%bb%84%e9%95%bf%e5%ba%a6%e6%88%90%e6%ad%a3%e6%af%94%20%e6%95%b0%e7%bb%84%e7%9a%84%e6%9f%a5%e6%89%be%e6%97%b6%e9%97%b4%20%20%e6%95%b0%e7%bb%84%e6%98%af%e6%9c%89%e5%ba%8f%e7%9a%84%2c%e5%ae%83%e5%8f%af%e4%bb%a5%e4%bd%bf%e7%94%a8%e5%9f%ba%e4%ba%8e%e5%af%b9%e6%95%b0%e6%97%b6%e9%97%b4%e7%9a%84%e7%ae%97%e6%b3%95%2c%e4%be%8b%e5%a6%82%e4%ba%8c%e5%88%86%e6%9f%a5%e6%89%be%20%20%20%20%20%20%e9%93%be%e8%a1%a8%0a%20%e9%93%be%e8%a1%a8%e7%9a%84%e5%af%bb%e5%9d%80%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e7%ba%bf%e6%80%a7%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e6%9f%a5%e6%89%be1%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e5%bf%85%e9%a1%bb%e6%b2%bf%e7%9d%80%e9%93%be%e8%a1%a8%e7%9a%84%e5%a4%b4%e6%88%96%e5%b0%be%e5%bc%80%e5%a7%8b%e4%b8%80%e7%9b%b4%e6%89%be%e4%b8%8b%e5%8e%bb%2c%e7%9b%b4%e5%88%b0%e6%89%be%e5%88%b0%e4%b8%ba%e6%ad%a2%2c%0a%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e5%af%bb%e5%9d%80%e6%93%8d%e4%bd%9c%e6%89%80%e9%9c%80%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e9%93%be%e8%a1%a8%e9%95%bf%e5%ba%a6%e6%88%90%e6%ad%a3%e6%af%94%20%e9%93%be%e8%a1%a8%e7%9a%84%e6%8f%92%e5%85%a5%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e6%8f%92%e5%85%a51%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e5%8f%aa%e9%9c%80%e8%a6%81%e8%ae%a9%e5%ae%83%e5%89%8d%e9%9d%a2%e7%9a%84%e5%85%83%e7%b4%a0%e5%92%8c%e5%90%8e%e9%9d%a2%e7%9a%84%e5%85%83%e7%b4%a0%e8%bf%9e%e6%8e%a5%e5%88%b0%e5%ae%83%e5%b0%b1%e5%8f%af%e4%bb%a5%e4%ba%86%2c%0a%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e6%8f%92%e5%85%a5%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd2%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%e9%93%be%e8%a1%a8%e7%9a%84%e5%88%a0%e9%99%a4%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e6%97%b6%e9%97%b4%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e5%88%a0%e9%99%a41%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e5%8f%aa%e9%9c%80%e8%a6%81%e8%ae%a9%e5%ae%83%e5%89%8d%e9%9d%a2%e7%9a%84%e5%85%83%e7%b4%a0%e8%bf%9e%e6%8e%a5%e5%88%b0%e5%ae%83%e5%90%8e%e9%9d%a2%e7%9a%84%e5%85%83%e7%b4%a0%e5%b0%b1%e5%8f%af%e4%bb%a5%e4%ba%86%2c%0a%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e5%88%a0%e9%99%a4%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%20%20%20%e6%a0%88%28FILO%29%e5%85%88%e8%bf%9b%e5%90%8e%e5%87%ba%0a%20%e6%a0%88%e7%9a%84%e5%af%bb%e5%9d%80%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e7%ba%bf%e6%80%a7%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e8%8e%b7%e5%8f%961%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e5%bf%85%e9%a1%bb%e4%bb%8e%e9%a1%b6%e9%83%a8%e6%8c%a8%e4%b8%aa%e5%8f%96%e5%87%ba%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e5%af%bb%e5%9d%80%e6%93%8d%e4%bd%9c%e6%89%80%e9%9c%80%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e6%a0%88%e9%95%bf%e5%ba%a6%e6%88%90%e6%ad%a3%e6%af%94%20%e6%a0%88%e7%9a%84%e5%88%a0%e9%99%a4%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e7%9a%84%2c%e5%ae%83%e4%b8%8d%e8%83%bd%e5%88%a0%e9%99%a4%e6%8c%87%e5%ae%9a%e7%9a%84%e5%85%83%e7%b4%a0%2c%e5%ae%83%e6%af%8f%e6%ac%a1%e5%8f%aa%e8%83%bd%e5%88%a0%e9%99%a41%e4%b8%aa%e6%a0%88%e9%a1%b6%e7%9a%84%e5%85%83%e7%b4%a0%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e6%8f%92%e5%85%a5%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%e6%a0%88%e7%9a%84%e6%8f%92%e5%85%a5%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e6%b7%bb%e5%8a%a01%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e7%9b%b4%e6%8e%a5%e5%90%91%e6%a0%88%e9%a1%b6%e9%83%a8%e6%b7%bb%e5%8a%a0%e5%8d%b3%e5%8f%af%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e6%8f%92%e5%85%a5%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%20%20%20%e9%98%9f%e5%88%97%28FIFO%29%e5%85%88%e8%bf%9b%e5%85%88%e5%87%ba%0a%20%e9%98%9f%e5%88%97%e7%9a%84%e5%af%bb%e5%9d%80%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e7%ba%bf%e6%80%a7%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e8%8e%b7%e5%8f%961%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e5%bf%85%e9%a1%bb%e4%bb%8e%e5%b0%be%e9%83%a8%e6%8c%a8%e4%b8%aa%e5%8f%96%e5%87%ba%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e5%af%bb%e5%9d%80%e6%93%8d%e4%bd%9c%e6%89%80%e9%9c%80%e7%9a%84%e6%97%b6%e9%97%b4%e5%92%8c%e9%98%9f%e5%88%97%e9%95%bf%e5%ba%a6%e6%88%90%e6%ad%a3%e6%af%94%20%e9%98%9f%e5%88%97%e7%9a%84%e5%88%a0%e9%99%a4%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e7%9a%84%2c%e5%ae%83%e4%b8%8d%e8%83%bd%e5%88%a0%e9%99%a4%e6%8c%87%e5%ae%9a%e7%9a%84%e5%85%83%e7%b4%a0%2c%e5%ae%83%e6%af%8f%e6%ac%a1%e5%8f%aa%e8%83%bd%e5%88%a0%e9%99%a41%e4%b8%aa%e5%b0%be%e9%83%a8%e7%9a%84%e5%85%83%e7%b4%a0%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e5%88%a0%e9%99%a4%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%e9%98%9f%e5%88%97%e7%9a%84%e6%8f%92%e5%85%a5%e6%97%b6%e9%97%b4%e6%98%af%e5%9f%ba%e4%ba%8e%e5%b8%b8%e6%95%b0%e7%9a%84%2c%e5%ae%83%e6%83%b3%e8%a6%81%e6%b7%bb%e5%8a%a01%e4%b8%aa%e5%85%83%e7%b4%a0%2c%e7%9b%b4%e6%8e%a5%e5%90%91%e9%98%9f%e5%88%97%e5%a4%b4%e9%83%a8%e6%b7%bb%e5%8a%a0%e5%8d%b3%e5%8f%af%2c%e5%9b%a0%e6%ad%a4%e5%ae%83%e7%9a%84%e6%8f%92%e5%85%a5%e6%93%8d%e4%bd%9c%e6%80%bb%e6%98%af%e8%83%bd1%e6%ac%a1%e6%93%8d%e4%bd%9c%e5%b0%b1%e8%83%bd%e5%ae%8c%e6%88%90%20%20%20%20%e5%93%88%e5%b8%8c%e8%a1%a8%28HashTable%29" aria-label="Tumblr">
+      <i class="fab fa-tumblr fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day22%2f&t=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%ba%8c%e5%8d%81%e4%ba%8c%e5%a4%a9%29" aria-label="Hacker News">
+      <i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      
+        <a id="menu-toggle" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;" aria-label="Menu">
+          <i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="share-toggle" class="icon" href="#" onclick="$('#share-footer').toggle();return false;" aria-label="Share">
+          <i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+          <i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+
+  <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2021  this 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">Writings</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+
+<script src=/js/code-copy.js></script>
+
+
+
+
+</html>

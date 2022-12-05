@@ -1,0 +1,12 @@
+# Netscape HTTP Cookie File
+# http://curl.haxx.se/rfc/cookie_spec.html
+# This is a generated file!  Do not edit.
+
+.winktv.co.kr	TRUE	/	FALSE	1687855625	userLoginSaveYN	Y
+.winktv.co.kr	TRUE	/	FALSE	1687855625	userLoginSaveID	WkdGamIyMXJZbXM9
+.winktv.co.kr	TRUE	/	FALSE	0	partner	winktv
+.winktv.co.kr	TRUE	/	TRUE	0	sessKey	704b2244e008bd55308c2f07cd1419d48e605ab2833601c77406113624a31123
+www.winktv.co.kr	FALSE	/	FALSE	1656345600	mainEventLayerYN	Y
+.winktv.co.kr	TRUE	/	FALSE	0	userLoginIdx	10045242
+.winktv.co.kr	TRUE	/	FALSE	0	userLoginYN	Y
+.winktv.co.kr	TRUE	/	FALSE	0	3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16	w1AMuQC4NjY9dLslpc43WJiyRPaPdeKYfZo6ZZi%2Bo9JsWhF2erCW%2FGW9dYLWgyAdau7I0f28lhCsit6L6RdvAOIUPqPluXtCSWhQcuouZhM%2BT%2FES5DWXC42wv6%2Fa%2B0HNHQblzD2ONfAQW1qZDp%2BlvFZQSNUUb1%2Bvd%2F6LFls1EbF2LSlg9z%2BliAGD68MWbqvn

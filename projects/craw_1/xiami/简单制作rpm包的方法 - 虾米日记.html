@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="https://latest.cactus.chat/cactus.js"></script>
+  <link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> 简单制作rpm包的方法 | 虾米日记</title>
+  <link rel = 'canonical' href = 'https://wjinlei.github.io/posts/exp-rpmbuild/'>
+  <meta name="description" content="对酒当歌，人生几何，譬如朝露，去日苦多">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="简单制作rpm包的方法" />
+<meta property="og:description" content="前言 还是用 主机大师 的脚本来举个例子rpm包的制作就没有deb包那么轻松了，你不能像debian系列一样将软件编译好后再打包进rpm包中而是需要编写.spec文件，来让rpm-build为我们编译并生成rpm包
+原理  安装rpm-build 创建目录结构  mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} 将要编译的源码包下载到SOURCES目录 编写.spec文件.spec文件建议放在SPECS目录中下面是主机大师中pure-ftpd软件的rpm包.spec文件  cat &gt; ~/rpmbuild/SPECS/pure-ftpd.spec &lt;&lt; EOF Name: pure-ftpd # 软件包名称 Version: 1.0.49 # 版本 Release: 1%{?dist} # 不用管,照写 Summary: pure-ftpd 1.0.49 # 简介 Group: Applications/Internet # 软件包分类 License: GPLv3&#43; # 协议 URL: https://www.hws.com # 软件包主页 Packager: hws # 维护者 Source0: ${pureftpd_filename}.tar.gz # 编译软件包时依赖的源码包名称，就是你放入`SOURCES`目录中的软件包 BuildRoot: %_topdir/BUILDROOT # 编译软件包时以哪个目录为根，这里表示以`BUILDROOT`为根 BuildRequires: gcc,make # 编译前依赖哪些包 Requires: openssl-devel,zlib-devel # 安装时依赖哪些包 %description # 描述 pure-ftpd 1." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wjinlei.github.io/posts/exp-rpmbuild/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-04T01:38:02+08:00" />
+<meta property="article:modified_time" content="2021-11-04T01:38:02+08:00" />
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="简单制作rpm包的方法"/>
+<meta name="twitter:description" content="前言 还是用 主机大师 的脚本来举个例子rpm包的制作就没有deb包那么轻松了，你不能像debian系列一样将软件编译好后再打包进rpm包中而是需要编写.spec文件，来让rpm-build为我们编译并生成rpm包
+原理  安装rpm-build 创建目录结构  mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} 将要编译的源码包下载到SOURCES目录 编写.spec文件.spec文件建议放在SPECS目录中下面是主机大师中pure-ftpd软件的rpm包.spec文件  cat &gt; ~/rpmbuild/SPECS/pure-ftpd.spec &lt;&lt; EOF Name: pure-ftpd # 软件包名称 Version: 1.0.49 # 版本 Release: 1%{?dist} # 不用管,照写 Summary: pure-ftpd 1.0.49 # 简介 Group: Applications/Internet # 软件包分类 License: GPLv3&#43; # 协议 URL: https://www.hws.com # 软件包主页 Packager: hws # 维护者 Source0: ${pureftpd_filename}.tar.gz # 编译软件包时依赖的源码包名称，就是你放入`SOURCES`目录中的软件包 BuildRoot: %_topdir/BUILDROOT # 编译软件包时以哪个目录为根，这里表示以`BUILDROOT`为根 BuildRequires: gcc,make # 编译前依赖哪些包 Requires: openssl-devel,zlib-devel # 安装时依赖哪些包 %description # 描述 pure-ftpd 1."/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://wjinlei.github.io/css/styles.4c2b9aa1d874d6766f554b2d404e8fd62ab4761f51ee9b3f358d12e81e7fa43a1b4378db995bc1926bbe5ed98c060be5e7bd4f2470504cf94f22b4b3a74e62b6.css" integrity="sha512-TCuaodh01nZvVUstQE6P1iq0dh9R7ps/NY0S6B5/pDobQ3jbmVvBkmu&#43;XtmMBgvl571PJHBQTPlPIrSzp05itg=="> 
+
+  
+   <link rel="stylesheet" href="https://wjinlei.github.io/css/custom.css"> 
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://wjinlei.github.io/images/favicon.ico" />
+
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+  <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;" aria-label="Top of Page"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">Writings</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li>
+          <a class="icon" href=" https://wjinlei.github.io/posts/exp-debbuild/" aria-label="Previous">
+            <i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i>
+          </a>
+        </li>
+        
+        
+        <li>
+          <a class="icon" href="https://wjinlei.github.io/posts/code-rustini/" aria-label="Next">
+            <i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+            <i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i>
+          </a>
+        </li>
+        <li>
+          <a class="icon" href="#" aria-label="Share">
+            <i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i>
+          </a>
+        </li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f" aria-label="Facebook">
+      <i class="fab fa-facebook " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&text=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="Twitter">
+      <i class="fab fa-twitter " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&title=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="Linkedin">
+      <i class="fab fa-linkedin " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&is_video=false&description=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="Pinterest">
+      <i class="fab fa-pinterest " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95&body=Check out this article: https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f" aria-label="Email">
+      <i class="fas fa-envelope " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&title=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="Pocket">
+      <i class="fab fa-get-pocket " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&title=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="reddit">
+      <i class="fab fa-reddit " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&name=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95&description=%e5%89%8d%e8%a8%80%20%e8%bf%98%e6%98%af%e7%94%a8%20%e4%b8%bb%e6%9c%ba%e5%a4%a7%e5%b8%88%20%e7%9a%84%e8%84%9a%e6%9c%ac%e6%9d%a5%e4%b8%be%e4%b8%aa%e4%be%8b%e5%ad%90rpm%e5%8c%85%e7%9a%84%e5%88%b6%e4%bd%9c%e5%b0%b1%e6%b2%a1%e6%9c%89deb%e5%8c%85%e9%82%a3%e4%b9%88%e8%bd%bb%e6%9d%be%e4%ba%86%ef%bc%8c%e4%bd%a0%e4%b8%8d%e8%83%bd%e5%83%8fdebian%e7%b3%bb%e5%88%97%e4%b8%80%e6%a0%b7%e5%b0%86%e8%bd%af%e4%bb%b6%e7%bc%96%e8%af%91%e5%a5%bd%e5%90%8e%e5%86%8d%e6%89%93%e5%8c%85%e8%bf%9brpm%e5%8c%85%e4%b8%ad%e8%80%8c%e6%98%af%e9%9c%80%e8%a6%81%e7%bc%96%e5%86%99.spec%e6%96%87%e4%bb%b6%ef%bc%8c%e6%9d%a5%e8%ae%a9rpm-build%e4%b8%ba%e6%88%91%e4%bb%ac%e7%bc%96%e8%af%91%e5%b9%b6%e7%94%9f%e6%88%90rpm%e5%8c%85%0a%e5%8e%9f%e7%90%86%20%20%e5%ae%89%e8%a3%85rpm-build%20%e5%88%9b%e5%bb%ba%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84%20%20mkdir%20-p%20~%2frpmbuild%2f%7bBUILD%2cRPMS%2cSOURCES%2cSPECS%2cSRPMS%7d%20%e5%b0%86%e8%a6%81%e7%bc%96%e8%af%91%e7%9a%84%e6%ba%90%e7%a0%81%e5%8c%85%e4%b8%8b%e8%bd%bd%e5%88%b0SOURCES%e7%9b%ae%e5%bd%95%20%e7%bc%96%e5%86%99.spec%e6%96%87%e4%bb%b6.spec%e6%96%87%e4%bb%b6%e5%bb%ba%e8%ae%ae%e6%94%be%e5%9c%a8SPECS%e7%9b%ae%e5%bd%95%e4%b8%ad%e4%b8%8b%e9%9d%a2%e6%98%af%e4%b8%bb%e6%9c%ba%e5%a4%a7%e5%b8%88%e4%b8%adpure-ftpd%e8%bd%af%e4%bb%b6%e7%9a%84rpm%e5%8c%85.spec%e6%96%87%e4%bb%b6%20%20cat%20%26gt%3b%20~%2frpmbuild%2fSPECS%2fpure-ftpd.spec%20%26lt%3b%26lt%3b%20EOF%20Name%3a%20pure-ftpd%20%23%20%e8%bd%af%e4%bb%b6%e5%8c%85%e5%90%8d%e7%a7%b0%20Version%3a%201.0.49%20%23%20%e7%89%88%e6%9c%ac%20Release%3a%201%25%7b%3fdist%7d%20%23%20%e4%b8%8d%e7%94%a8%e7%ae%a1%2c%e7%85%a7%e5%86%99%20Summary%3a%20pure-ftpd%201.0.49%20%23%20%e7%ae%80%e4%bb%8b%20Group%3a%20Applications%2fInternet%20%23%20%e8%bd%af%e4%bb%b6%e5%8c%85%e5%88%86%e7%b1%bb%20License%3a%20GPLv3%2b%20%23%20%e5%8d%8f%e8%ae%ae%20URL%3a%20https%3a%2f%2fwww.hws.com%20%23%20%e8%bd%af%e4%bb%b6%e5%8c%85%e4%b8%bb%e9%a1%b5%20Packager%3a%20hws%20%23%20%e7%bb%b4%e6%8a%a4%e8%80%85%20Source0%3a%20%24%7bpureftpd_filename%7d.tar.gz%20%23%20%e7%bc%96%e8%af%91%e8%bd%af%e4%bb%b6%e5%8c%85%e6%97%b6%e4%be%9d%e8%b5%96%e7%9a%84%e6%ba%90%e7%a0%81%e5%8c%85%e5%90%8d%e7%a7%b0%ef%bc%8c%e5%b0%b1%e6%98%af%e4%bd%a0%e6%94%be%e5%85%a5%60SOURCES%60%e7%9b%ae%e5%bd%95%e4%b8%ad%e7%9a%84%e8%bd%af%e4%bb%b6%e5%8c%85%20BuildRoot%3a%20%25_topdir%2fBUILDROOT%20%23%20%e7%bc%96%e8%af%91%e8%bd%af%e4%bb%b6%e5%8c%85%e6%97%b6%e4%bb%a5%e5%93%aa%e4%b8%aa%e7%9b%ae%e5%bd%95%e4%b8%ba%e6%a0%b9%ef%bc%8c%e8%bf%99%e9%87%8c%e8%a1%a8%e7%a4%ba%e4%bb%a5%60BUILDROOT%60%e4%b8%ba%e6%a0%b9%20BuildRequires%3a%20gcc%2cmake%20%23%20%e7%bc%96%e8%af%91%e5%89%8d%e4%be%9d%e8%b5%96%e5%93%aa%e4%ba%9b%e5%8c%85%20Requires%3a%20openssl-devel%2czlib-devel%20%23%20%e5%ae%89%e8%a3%85%e6%97%b6%e4%be%9d%e8%b5%96%e5%93%aa%e4%ba%9b%e5%8c%85%20%25description%20%23%20%e6%8f%8f%e8%bf%b0%20pure-ftpd%201." aria-label="Tumblr">
+      <i class="fab fa-tumblr " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&t=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="Hacker News">
+      <i class="fab fa-hacker-news " aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+    
+  </span>
+</div>
+
+
+  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+      <h1 class="posttitle" itemprop="name headline">
+        简单制作rpm包的方法
+      </h1>
+      <div class="meta">
+        
+        <div class="postdate">
+          
+          <time datetime="2021-11-04 01:38:02 &#43;0800 CST" itemprop="datePublished">2021-11-04</time>
+          
+        </div>
+        
+        
+        <div class="article-read-time">
+          <i class="far fa-clock"></i>
+          
+          3 minute read
+        </div>
+        
+        
+        
+      </div>
+    </header>
+
+  
+    
+    <div id="toc">
+      <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#前言">前言</a></li>
+        <li><a href="#原理">原理</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    <div class="content" itemprop="articleBody">
+      <h3 id="前言">前言</h3>
+<p>还是用 <a href="https://github.com/Wjinlei/lanmp_rpmbuild">主机大师</a> 的脚本来举个例子<!-- raw HTML omitted -->
+<code>rpm</code>包的制作就没有<code>deb</code>包那么轻松了，你不能像<code>debian</code>系列一样将软件编译好后再打包进<code>rpm</code>包中<!-- raw HTML omitted -->
+而是需要编写<code>.spec</code>文件，来让<code>rpm-build</code>为我们编译并生成<code>rpm</code>包</p>
+<h3 id="原理">原理</h3>
+<ol>
+<li>安装<code>rpm-build</code></li>
+<li>创建目录结构</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mkdir -p ~/rpmbuild/<span style="color:#000;font-weight:bold">{</span>BUILD,RPMS,SOURCES,SPECS,SRPMS<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><ol start="3">
+<li>将要编译的源码包下载到<code>SOURCES</code>目录</li>
+<li>编写<code>.spec</code>文件<!-- raw HTML omitted -->
+<code>.spec</code>文件建议放在<code>SPECS</code>目录中<!-- raw HTML omitted -->
+下面是<code>主机大师</code>中<code>pure-ftpd</code>软件的rpm包<code>.spec</code>文件<!-- raw HTML omitted --></li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">    cat &gt; ~/rpmbuild/SPECS/pure-ftpd.spec <span style="color:#d14">&lt;&lt; EOF
+</span><span style="color:#d14">Name:           pure-ftpd                          # 软件包名称
+</span><span style="color:#d14">Version:        1.0.49                             # 版本
+</span><span style="color:#d14">Release:        1%{?dist}                          # 不用管,照写
+</span><span style="color:#d14">Summary:        pure-ftpd 1.0.49                   # 简介
+</span><span style="color:#d14">
+</span><span style="color:#d14">Group:          Applications/Internet              # 软件包分类
+</span><span style="color:#d14">License:        GPLv3+                             # 协议
+</span><span style="color:#d14">URL:            https://www.hws.com                # 软件包主页
+</span><span style="color:#d14">Packager:       hws                                # 维护者
+</span><span style="color:#d14">Source0:        ${pureftpd_filename}.tar.gz        # 编译软件包时依赖的源码包名称，就是你放入`SOURCES`目录中的软件包
+</span><span style="color:#d14">
+</span><span style="color:#d14">BuildRoot:      %_topdir/BUILDROOT                 # 编译软件包时以哪个目录为根，这里表示以`BUILDROOT`为根
+</span><span style="color:#d14">BuildRequires:  gcc,make                           # 编译前依赖哪些包
+</span><span style="color:#d14">Requires:       openssl-devel,zlib-devel           # 安装时依赖哪些包
+</span><span style="color:#d14">
+</span><span style="color:#d14">%description                                       # 描述
+</span><span style="color:#d14">pure-ftpd 1.0.49 build for hws.com
+</span><span style="color:#d14">
+</span><span style="color:#d14">%prep                                              # 编译前的操作，这里一般做准备工作，例如解压源码包
+</span><span style="color:#d14">tar zxf \$RPM_SOURCE_DIR/${pureftpd_filename}.tar.gz
+</span><span style="color:#d14">
+</span><span style="color:#d14">%build                                             # 编译阶段，这里一般写`configure`中的编译参数
+</span><span style="color:#d14">cd ${pureftpd_filename}
+</span><span style="color:#d14">./configure --prefix=${pureftpd_location} \
+</span><span style="color:#d14">--with-puredb \
+</span><span style="color:#d14">--with-quotas \
+</span><span style="color:#d14">--with-cookie \
+</span><span style="color:#d14">--with-virtualhosts \
+</span><span style="color:#d14">--with-diraliases \
+</span><span style="color:#d14">--with-sysquotas \
+</span><span style="color:#d14">--with-ratios \
+</span><span style="color:#d14">--with-altlog \
+</span><span style="color:#d14">--with-paranoidmsg \
+</span><span style="color:#d14">--with-shadow \
+</span><span style="color:#d14">--with-welcomemsg \
+</span><span style="color:#d14">--with-throttling \
+</span><span style="color:#d14">--with-uploadscript \
+</span><span style="color:#d14">--with-language=english \
+</span><span style="color:#d14">--with-ftpwho \
+</span><span style="color:#d14">--with-tls
+</span><span style="color:#d14">
+</span><span style="color:#d14">make %{?_smp_mflags}
+</span><span style="color:#d14">
+</span><span style="color:#d14">%install    # 安装阶段，你要把什么东西释放到系统，就通过install指令安装到`BUILDROOT`目录，因为有些东西不是编译时产生的
+</span><span style="color:#d14">cd ${pureftpd_filename}
+</span><span style="color:#d14">make install DESTDIR=%{buildroot}
+</span><span style="color:#d14">install -D -m 0755 \$RPM_SOURCE_DIR/pure-ftpd \$RPM_BUILD_ROOT/etc/init.d/pure-ftpd
+</span><span style="color:#d14">install -D -m 0644 \$RPM_SOURCE_DIR/pure-ftpd.conf \$RPM_BUILD_ROOT/${pureftpd_location}/etc/pure-ftpd.conf
+</span><span style="color:#d14">install -D -m 0600 \$RPM_SOURCE_DIR/pureftpd.passwd \$RPM_BUILD_ROOT/${pureftpd_location}/etc/pureftpd.passwd
+</span><span style="color:#d14">install -D -m 0600 \$RPM_SOURCE_DIR/pureftpd.pdb \$RPM_BUILD_ROOT/${pureftpd_location}/etc/pureftpd.pdb
+</span><span style="color:#d14">install -D -m 0600 \$RPM_SOURCE_DIR/pure-ftpd.pem \$RPM_BUILD_ROOT/etc/ssl/private/pure-ftpd.pem
+</span><span style="color:#d14">install -D -m 0644 \$RPM_SOURCE_DIR/README \$RPM_BUILD_ROOT/${pureftpd_location}/var/run/README
+</span><span style="color:#d14">
+</span><span style="color:#d14">%post
+</span><span style="color:#d14">chkconfig --add pure-ftpd &gt;/dev/null 2&gt;&amp;1            # 安装后阶段
+</span><span style="color:#d14">/etc/init.d/pure-ftpd start
+</span><span style="color:#d14">
+</span><span style="color:#d14">%preun                                               # 卸载前阶段
+</span><span style="color:#d14">chkconfig --del pure-ftpd &gt;/dev/null 2&gt;&amp;1
+</span><span style="color:#d14">/etc/init.d/pure-ftpd stop
+</span><span style="color:#d14">
+</span><span style="color:#d14">%files                                               # 指定哪些文件会被释放到系统，这些文件都是再`BUILDROOT`中的
+</span><span style="color:#d14">${pureftpd_location}
+</span><span style="color:#d14">/etc/init.d/pure-ftpd
+</span><span style="color:#d14">/etc/ssl/private/pure-ftpd.pem
+</span><span style="color:#d14">
+</span><span style="color:#d14">%doc
+</span><span style="color:#d14">
+</span><span style="color:#d14">%clean                                               # 编译后的清理工作
+</span><span style="color:#d14">rm -fr %{buildroot}
+</span><span style="color:#d14">EOF</span>
+</code></pre></div><ol start="5">
+<li>编译并生成rpm包</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">rpmbuild -bb ~/rpmbuild/SPECS/pure-ftpd.spec
+</code></pre></div>
+    </div>
+  </article>
+
+  
+  
+
+
+
+
+  <div class="blog-post-comments">
+    
+      <div id="disquss_thread">
+  <script src="https://utteranc.es/client.js"
+    repo="Wjinlei/wjinlei.github.io"
+    issue-term="pathname"
+    label="Wjinlei"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
+    
+  </div>
+
+
+
+  <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/posts">Writings</a></li>
+         
+          <li><a href="/tags">Tags</a></li>
+         
+          <li><a href="/about">About</a></li>
+        
+      </ul>
+    </div>
+
+    
+
+    <div id="share-footer" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f" aria-label="Facebook">
+      <i class="fab fa-facebook fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&text=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="Twitter">
+      <i class="fab fa-twitter fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&title=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="Linkedin">
+      <i class="fab fa-linkedin fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&is_video=false&description=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="Pinterest">
+      <i class="fab fa-pinterest fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95&body=Check out this article: https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f" aria-label="Email">
+      <i class="fas fa-envelope fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&title=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="Pocket">
+      <i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&title=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="reddit">
+      <i class="fab fa-reddit fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&name=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95&description=%e5%89%8d%e8%a8%80%20%e8%bf%98%e6%98%af%e7%94%a8%20%e4%b8%bb%e6%9c%ba%e5%a4%a7%e5%b8%88%20%e7%9a%84%e8%84%9a%e6%9c%ac%e6%9d%a5%e4%b8%be%e4%b8%aa%e4%be%8b%e5%ad%90rpm%e5%8c%85%e7%9a%84%e5%88%b6%e4%bd%9c%e5%b0%b1%e6%b2%a1%e6%9c%89deb%e5%8c%85%e9%82%a3%e4%b9%88%e8%bd%bb%e6%9d%be%e4%ba%86%ef%bc%8c%e4%bd%a0%e4%b8%8d%e8%83%bd%e5%83%8fdebian%e7%b3%bb%e5%88%97%e4%b8%80%e6%a0%b7%e5%b0%86%e8%bd%af%e4%bb%b6%e7%bc%96%e8%af%91%e5%a5%bd%e5%90%8e%e5%86%8d%e6%89%93%e5%8c%85%e8%bf%9brpm%e5%8c%85%e4%b8%ad%e8%80%8c%e6%98%af%e9%9c%80%e8%a6%81%e7%bc%96%e5%86%99.spec%e6%96%87%e4%bb%b6%ef%bc%8c%e6%9d%a5%e8%ae%a9rpm-build%e4%b8%ba%e6%88%91%e4%bb%ac%e7%bc%96%e8%af%91%e5%b9%b6%e7%94%9f%e6%88%90rpm%e5%8c%85%0a%e5%8e%9f%e7%90%86%20%20%e5%ae%89%e8%a3%85rpm-build%20%e5%88%9b%e5%bb%ba%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84%20%20mkdir%20-p%20~%2frpmbuild%2f%7bBUILD%2cRPMS%2cSOURCES%2cSPECS%2cSRPMS%7d%20%e5%b0%86%e8%a6%81%e7%bc%96%e8%af%91%e7%9a%84%e6%ba%90%e7%a0%81%e5%8c%85%e4%b8%8b%e8%bd%bd%e5%88%b0SOURCES%e7%9b%ae%e5%bd%95%20%e7%bc%96%e5%86%99.spec%e6%96%87%e4%bb%b6.spec%e6%96%87%e4%bb%b6%e5%bb%ba%e8%ae%ae%e6%94%be%e5%9c%a8SPECS%e7%9b%ae%e5%bd%95%e4%b8%ad%e4%b8%8b%e9%9d%a2%e6%98%af%e4%b8%bb%e6%9c%ba%e5%a4%a7%e5%b8%88%e4%b8%adpure-ftpd%e8%bd%af%e4%bb%b6%e7%9a%84rpm%e5%8c%85.spec%e6%96%87%e4%bb%b6%20%20cat%20%26gt%3b%20~%2frpmbuild%2fSPECS%2fpure-ftpd.spec%20%26lt%3b%26lt%3b%20EOF%20Name%3a%20pure-ftpd%20%23%20%e8%bd%af%e4%bb%b6%e5%8c%85%e5%90%8d%e7%a7%b0%20Version%3a%201.0.49%20%23%20%e7%89%88%e6%9c%ac%20Release%3a%201%25%7b%3fdist%7d%20%23%20%e4%b8%8d%e7%94%a8%e7%ae%a1%2c%e7%85%a7%e5%86%99%20Summary%3a%20pure-ftpd%201.0.49%20%23%20%e7%ae%80%e4%bb%8b%20Group%3a%20Applications%2fInternet%20%23%20%e8%bd%af%e4%bb%b6%e5%8c%85%e5%88%86%e7%b1%bb%20License%3a%20GPLv3%2b%20%23%20%e5%8d%8f%e8%ae%ae%20URL%3a%20https%3a%2f%2fwww.hws.com%20%23%20%e8%bd%af%e4%bb%b6%e5%8c%85%e4%b8%bb%e9%a1%b5%20Packager%3a%20hws%20%23%20%e7%bb%b4%e6%8a%a4%e8%80%85%20Source0%3a%20%24%7bpureftpd_filename%7d.tar.gz%20%23%20%e7%bc%96%e8%af%91%e8%bd%af%e4%bb%b6%e5%8c%85%e6%97%b6%e4%be%9d%e8%b5%96%e7%9a%84%e6%ba%90%e7%a0%81%e5%8c%85%e5%90%8d%e7%a7%b0%ef%bc%8c%e5%b0%b1%e6%98%af%e4%bd%a0%e6%94%be%e5%85%a5%60SOURCES%60%e7%9b%ae%e5%bd%95%e4%b8%ad%e7%9a%84%e8%bd%af%e4%bb%b6%e5%8c%85%20BuildRoot%3a%20%25_topdir%2fBUILDROOT%20%23%20%e7%bc%96%e8%af%91%e8%bd%af%e4%bb%b6%e5%8c%85%e6%97%b6%e4%bb%a5%e5%93%aa%e4%b8%aa%e7%9b%ae%e5%bd%95%e4%b8%ba%e6%a0%b9%ef%bc%8c%e8%bf%99%e9%87%8c%e8%a1%a8%e7%a4%ba%e4%bb%a5%60BUILDROOT%60%e4%b8%ba%e6%a0%b9%20BuildRequires%3a%20gcc%2cmake%20%23%20%e7%bc%96%e8%af%91%e5%89%8d%e4%be%9d%e8%b5%96%e5%93%aa%e4%ba%9b%e5%8c%85%20Requires%3a%20openssl-devel%2czlib-devel%20%23%20%e5%ae%89%e8%a3%85%e6%97%b6%e4%be%9d%e8%b5%96%e5%93%aa%e4%ba%9b%e5%8c%85%20%25description%20%23%20%e6%8f%8f%e8%bf%b0%20pure-ftpd%201." aria-label="Tumblr">
+      <i class="fab fa-tumblr fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-rpmbuild%2f&t=%e7%ae%80%e5%8d%95%e5%88%b6%e4%bd%9crpm%e5%8c%85%e7%9a%84%e6%96%b9%e6%b3%95" aria-label="Hacker News">
+      <i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      
+        <a id="menu-toggle" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;" aria-label="Menu">
+          <i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="share-toggle" class="icon" href="#" onclick="$('#share-footer').toggle();return false;" aria-label="Share">
+          <i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+          <i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+
+  <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2021  this 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">Writings</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+
+<script src=/js/code-copy.js></script>
+
+
+
+
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="https://latest.cactus.chat/cactus.js"></script>
+  <link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> Java学习笔记(第七天) | 虾米日记</title>
+  <link rel = 'canonical' href = 'https://wjinlei.github.io/posts/exp-java-day7/'>
+  <meta name="description" content="对酒当歌，人生几何，譬如朝露，去日苦多">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="Java学习笔记(第七天)" />
+<meta property="og:description" content="内部类
+ 内部类提供了更精细的封装 内部类是和外部类的实例相绑定的，它可以调用外部类的实例方法，包括被private修饰的方法或成员 内部类之所以能访问外部类的成员，是因为编译器帮你的内部类注入了一个this$0的外部类实例成员 外部类也可以调用内部类中被private修饰的方法或成员变量 内部类不一定非要定义在类中，也可以定义在接口，枚举中    静态内部类
+ 静态内部类不和实例绑定，因此它不能调用外部类的实例方法或成员变量 静态内部类只能调用外部类中的静态变量或静态方法 不过还是有办法访问外部类中的非静态方法或成员，就是通过构造器将外部类的实例传进来    什么时候使用内部类，什么时候使用静态内部类？
+ 永远优先使用静态内部类，除非编译报错。 因为编译器偷偷帮你注入的外部类实例可能你用不到，造成浪费空间    匿名内部类
+ new 一个接口并提供实现体，就相当于创建一个实现该接口的匿名内部类 new 一个抽象类提供实现体，就相当于创建一个覆盖了对应方法的子类(匿名内部类) 匿名内部类可以变为lambda表达式 匿名内部类虽然没有名字，但在字节码的表示中是以外围类的名字&#43;$数字来命名的 匿名内部类也可以访问外围类中的实例变量或方法(类似其他语言中的闭包的概念)    在Java中Fork子进程
+  public class Fork { public static void main(String[] args) { // 请在这里使用Java代码fork一个子进程，  // 将fork的子进程的标准输出重定向到指定文件：工作目录下名为output.txt的文件  // 工作目录是项目目录下的working-directory目录  //（可以用getWorkingDir()方法得到这个目录对应的File对象）  // 传递的命令是sh run.sh  // 环境变量是AAA=123  ProcessBuilder processBuilder = new ProcessBuilder(&#34;bash&#34;, &#34;run." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wjinlei.github.io/posts/exp-java-day7/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-04T02:30:15+08:00" />
+<meta property="article:modified_time" content="2021-11-04T02:30:15+08:00" />
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Java学习笔记(第七天)"/>
+<meta name="twitter:description" content="内部类
+ 内部类提供了更精细的封装 内部类是和外部类的实例相绑定的，它可以调用外部类的实例方法，包括被private修饰的方法或成员 内部类之所以能访问外部类的成员，是因为编译器帮你的内部类注入了一个this$0的外部类实例成员 外部类也可以调用内部类中被private修饰的方法或成员变量 内部类不一定非要定义在类中，也可以定义在接口，枚举中    静态内部类
+ 静态内部类不和实例绑定，因此它不能调用外部类的实例方法或成员变量 静态内部类只能调用外部类中的静态变量或静态方法 不过还是有办法访问外部类中的非静态方法或成员，就是通过构造器将外部类的实例传进来    什么时候使用内部类，什么时候使用静态内部类？
+ 永远优先使用静态内部类，除非编译报错。 因为编译器偷偷帮你注入的外部类实例可能你用不到，造成浪费空间    匿名内部类
+ new 一个接口并提供实现体，就相当于创建一个实现该接口的匿名内部类 new 一个抽象类提供实现体，就相当于创建一个覆盖了对应方法的子类(匿名内部类) 匿名内部类可以变为lambda表达式 匿名内部类虽然没有名字，但在字节码的表示中是以外围类的名字&#43;$数字来命名的 匿名内部类也可以访问外围类中的实例变量或方法(类似其他语言中的闭包的概念)    在Java中Fork子进程
+  public class Fork { public static void main(String[] args) { // 请在这里使用Java代码fork一个子进程，  // 将fork的子进程的标准输出重定向到指定文件：工作目录下名为output.txt的文件  // 工作目录是项目目录下的working-directory目录  //（可以用getWorkingDir()方法得到这个目录对应的File对象）  // 传递的命令是sh run.sh  // 环境变量是AAA=123  ProcessBuilder processBuilder = new ProcessBuilder(&#34;bash&#34;, &#34;run."/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://wjinlei.github.io/css/styles.4c2b9aa1d874d6766f554b2d404e8fd62ab4761f51ee9b3f358d12e81e7fa43a1b4378db995bc1926bbe5ed98c060be5e7bd4f2470504cf94f22b4b3a74e62b6.css" integrity="sha512-TCuaodh01nZvVUstQE6P1iq0dh9R7ps/NY0S6B5/pDobQ3jbmVvBkmu&#43;XtmMBgvl571PJHBQTPlPIrSzp05itg=="> 
+
+  
+   <link rel="stylesheet" href="https://wjinlei.github.io/css/custom.css"> 
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://wjinlei.github.io/images/favicon.ico" />
+
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+  <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;" aria-label="Top of Page"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">Writings</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li>
+          <a class="icon" href=" https://wjinlei.github.io/posts/exp-java-day6/" aria-label="Previous">
+            <i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i>
+          </a>
+        </li>
+        
+        
+        <li>
+          <a class="icon" href="https://wjinlei.github.io/posts/use-hugo-write-blog/" aria-label="Next">
+            <i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i>
+          </a>
+        </li>
+        
+        <li>
+          <a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+            <i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i>
+          </a>
+        </li>
+        <li>
+          <a class="icon" href="#" aria-label="Share">
+            <i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i>
+          </a>
+        </li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f" aria-label="Facebook">
+      <i class="fab fa-facebook " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&text=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="Twitter">
+      <i class="fab fa-twitter " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="Linkedin">
+      <i class="fab fa-linkedin " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&is_video=false&description=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="Pinterest">
+      <i class="fab fa-pinterest " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29&body=Check out this article: https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f" aria-label="Email">
+      <i class="fas fa-envelope " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="Pocket">
+      <i class="fab fa-get-pocket " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="reddit">
+      <i class="fab fa-reddit " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&name=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29&description=%e5%86%85%e9%83%a8%e7%b1%bb%0a%20%e5%86%85%e9%83%a8%e7%b1%bb%e6%8f%90%e4%be%9b%e4%ba%86%e6%9b%b4%e7%b2%be%e7%bb%86%e7%9a%84%e5%b0%81%e8%a3%85%20%e5%86%85%e9%83%a8%e7%b1%bb%e6%98%af%e5%92%8c%e5%a4%96%e9%83%a8%e7%b1%bb%e7%9a%84%e5%ae%9e%e4%be%8b%e7%9b%b8%e7%bb%91%e5%ae%9a%e7%9a%84%ef%bc%8c%e5%ae%83%e5%8f%af%e4%bb%a5%e8%b0%83%e7%94%a8%e5%a4%96%e9%83%a8%e7%b1%bb%e7%9a%84%e5%ae%9e%e4%be%8b%e6%96%b9%e6%b3%95%ef%bc%8c%e5%8c%85%e6%8b%ac%e8%a2%abprivate%e4%bf%ae%e9%a5%b0%e7%9a%84%e6%96%b9%e6%b3%95%e6%88%96%e6%88%90%e5%91%98%20%e5%86%85%e9%83%a8%e7%b1%bb%e4%b9%8b%e6%89%80%e4%bb%a5%e8%83%bd%e8%ae%bf%e9%97%ae%e5%a4%96%e9%83%a8%e7%b1%bb%e7%9a%84%e6%88%90%e5%91%98%ef%bc%8c%e6%98%af%e5%9b%a0%e4%b8%ba%e7%bc%96%e8%af%91%e5%99%a8%e5%b8%ae%e4%bd%a0%e7%9a%84%e5%86%85%e9%83%a8%e7%b1%bb%e6%b3%a8%e5%85%a5%e4%ba%86%e4%b8%80%e4%b8%aathis%240%e7%9a%84%e5%a4%96%e9%83%a8%e7%b1%bb%e5%ae%9e%e4%be%8b%e6%88%90%e5%91%98%20%e5%a4%96%e9%83%a8%e7%b1%bb%e4%b9%9f%e5%8f%af%e4%bb%a5%e8%b0%83%e7%94%a8%e5%86%85%e9%83%a8%e7%b1%bb%e4%b8%ad%e8%a2%abprivate%e4%bf%ae%e9%a5%b0%e7%9a%84%e6%96%b9%e6%b3%95%e6%88%96%e6%88%90%e5%91%98%e5%8f%98%e9%87%8f%20%e5%86%85%e9%83%a8%e7%b1%bb%e4%b8%8d%e4%b8%80%e5%ae%9a%e9%9d%9e%e8%a6%81%e5%ae%9a%e4%b9%89%e5%9c%a8%e7%b1%bb%e4%b8%ad%ef%bc%8c%e4%b9%9f%e5%8f%af%e4%bb%a5%e5%ae%9a%e4%b9%89%e5%9c%a8%e6%8e%a5%e5%8f%a3%ef%bc%8c%e6%9e%9a%e4%b8%be%e4%b8%ad%20%20%20%20%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%0a%20%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%e4%b8%8d%e5%92%8c%e5%ae%9e%e4%be%8b%e7%bb%91%e5%ae%9a%ef%bc%8c%e5%9b%a0%e6%ad%a4%e5%ae%83%e4%b8%8d%e8%83%bd%e8%b0%83%e7%94%a8%e5%a4%96%e9%83%a8%e7%b1%bb%e7%9a%84%e5%ae%9e%e4%be%8b%e6%96%b9%e6%b3%95%e6%88%96%e6%88%90%e5%91%98%e5%8f%98%e9%87%8f%20%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%e5%8f%aa%e8%83%bd%e8%b0%83%e7%94%a8%e5%a4%96%e9%83%a8%e7%b1%bb%e4%b8%ad%e7%9a%84%e9%9d%99%e6%80%81%e5%8f%98%e9%87%8f%e6%88%96%e9%9d%99%e6%80%81%e6%96%b9%e6%b3%95%20%e4%b8%8d%e8%bf%87%e8%bf%98%e6%98%af%e6%9c%89%e5%8a%9e%e6%b3%95%e8%ae%bf%e9%97%ae%e5%a4%96%e9%83%a8%e7%b1%bb%e4%b8%ad%e7%9a%84%e9%9d%9e%e9%9d%99%e6%80%81%e6%96%b9%e6%b3%95%e6%88%96%e6%88%90%e5%91%98%ef%bc%8c%e5%b0%b1%e6%98%af%e9%80%9a%e8%bf%87%e6%9e%84%e9%80%a0%e5%99%a8%e5%b0%86%e5%a4%96%e9%83%a8%e7%b1%bb%e7%9a%84%e5%ae%9e%e4%be%8b%e4%bc%a0%e8%bf%9b%e6%9d%a5%20%20%20%20%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e4%bd%bf%e7%94%a8%e5%86%85%e9%83%a8%e7%b1%bb%ef%bc%8c%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e4%bd%bf%e7%94%a8%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%ef%bc%9f%0a%20%e6%b0%b8%e8%bf%9c%e4%bc%98%e5%85%88%e4%bd%bf%e7%94%a8%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%ef%bc%8c%e9%99%a4%e9%9d%9e%e7%bc%96%e8%af%91%e6%8a%a5%e9%94%99%e3%80%82%20%e5%9b%a0%e4%b8%ba%e7%bc%96%e8%af%91%e5%99%a8%e5%81%b7%e5%81%b7%e5%b8%ae%e4%bd%a0%e6%b3%a8%e5%85%a5%e7%9a%84%e5%a4%96%e9%83%a8%e7%b1%bb%e5%ae%9e%e4%be%8b%e5%8f%af%e8%83%bd%e4%bd%a0%e7%94%a8%e4%b8%8d%e5%88%b0%ef%bc%8c%e9%80%a0%e6%88%90%e6%b5%aa%e8%b4%b9%e7%a9%ba%e9%97%b4%20%20%20%20%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%0a%20new%20%e4%b8%80%e4%b8%aa%e6%8e%a5%e5%8f%a3%e5%b9%b6%e6%8f%90%e4%be%9b%e5%ae%9e%e7%8e%b0%e4%bd%93%ef%bc%8c%e5%b0%b1%e7%9b%b8%e5%bd%93%e4%ba%8e%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa%e5%ae%9e%e7%8e%b0%e8%af%a5%e6%8e%a5%e5%8f%a3%e7%9a%84%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%20new%20%e4%b8%80%e4%b8%aa%e6%8a%bd%e8%b1%a1%e7%b1%bb%e6%8f%90%e4%be%9b%e5%ae%9e%e7%8e%b0%e4%bd%93%ef%bc%8c%e5%b0%b1%e7%9b%b8%e5%bd%93%e4%ba%8e%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa%e8%a6%86%e7%9b%96%e4%ba%86%e5%af%b9%e5%ba%94%e6%96%b9%e6%b3%95%e7%9a%84%e5%ad%90%e7%b1%bb%28%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%29%20%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%e5%8f%af%e4%bb%a5%e5%8f%98%e4%b8%balambda%e8%a1%a8%e8%be%be%e5%bc%8f%20%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%e8%99%bd%e7%84%b6%e6%b2%a1%e6%9c%89%e5%90%8d%e5%ad%97%ef%bc%8c%e4%bd%86%e5%9c%a8%e5%ad%97%e8%8a%82%e7%a0%81%e7%9a%84%e8%a1%a8%e7%a4%ba%e4%b8%ad%e6%98%af%e4%bb%a5%e5%a4%96%e5%9b%b4%e7%b1%bb%e7%9a%84%e5%90%8d%e5%ad%97%2b%24%e6%95%b0%e5%ad%97%e6%9d%a5%e5%91%bd%e5%90%8d%e7%9a%84%20%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%e4%b9%9f%e5%8f%af%e4%bb%a5%e8%ae%bf%e9%97%ae%e5%a4%96%e5%9b%b4%e7%b1%bb%e4%b8%ad%e7%9a%84%e5%ae%9e%e4%be%8b%e5%8f%98%e9%87%8f%e6%88%96%e6%96%b9%e6%b3%95%28%e7%b1%bb%e4%bc%bc%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80%e4%b8%ad%e7%9a%84%e9%97%ad%e5%8c%85%e7%9a%84%e6%a6%82%e5%bf%b5%29%20%20%20%20%e5%9c%a8Java%e4%b8%adFork%e5%ad%90%e8%bf%9b%e7%a8%8b%0a%20%20public%20class%20Fork%20%7b%20public%20static%20void%20main%28String%5b%5d%20args%29%20%7b%20%2f%2f%20%e8%af%b7%e5%9c%a8%e8%bf%99%e9%87%8c%e4%bd%bf%e7%94%a8Java%e4%bb%a3%e7%a0%81fork%e4%b8%80%e4%b8%aa%e5%ad%90%e8%bf%9b%e7%a8%8b%ef%bc%8c%20%20%2f%2f%20%e5%b0%86fork%e7%9a%84%e5%ad%90%e8%bf%9b%e7%a8%8b%e7%9a%84%e6%a0%87%e5%87%86%e8%be%93%e5%87%ba%e9%87%8d%e5%ae%9a%e5%90%91%e5%88%b0%e6%8c%87%e5%ae%9a%e6%96%87%e4%bb%b6%ef%bc%9a%e5%b7%a5%e4%bd%9c%e7%9b%ae%e5%bd%95%e4%b8%8b%e5%90%8d%e4%b8%baoutput.txt%e7%9a%84%e6%96%87%e4%bb%b6%20%20%2f%2f%20%e5%b7%a5%e4%bd%9c%e7%9b%ae%e5%bd%95%e6%98%af%e9%a1%b9%e7%9b%ae%e7%9b%ae%e5%bd%95%e4%b8%8b%e7%9a%84working-directory%e7%9b%ae%e5%bd%95%20%20%2f%2f%ef%bc%88%e5%8f%af%e4%bb%a5%e7%94%a8getWorkingDir%28%29%e6%96%b9%e6%b3%95%e5%be%97%e5%88%b0%e8%bf%99%e4%b8%aa%e7%9b%ae%e5%bd%95%e5%af%b9%e5%ba%94%e7%9a%84File%e5%af%b9%e8%b1%a1%ef%bc%89%20%20%2f%2f%20%e4%bc%a0%e9%80%92%e7%9a%84%e5%91%bd%e4%bb%a4%e6%98%afsh%20run.sh%20%20%2f%2f%20%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f%e6%98%afAAA%3d123%20%20ProcessBuilder%20processBuilder%20%3d%20new%20ProcessBuilder%28%26%2334%3bbash%26%2334%3b%2c%20%26%2334%3brun." aria-label="Tumblr">
+      <i class="fab fa-tumblr " aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&t=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="Hacker News">
+      <i class="fab fa-hacker-news " aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+    
+  </span>
+</div>
+
+
+  <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+      <h1 class="posttitle" itemprop="name headline">
+        Java学习笔记(第七天)
+      </h1>
+      <div class="meta">
+        
+        <div class="postdate">
+          
+          <time datetime="2021-11-04 02:30:15 &#43;0800 CST" itemprop="datePublished">2021-11-04</time>
+          
+        </div>
+        
+        
+        <div class="article-read-time">
+          <i class="far fa-clock"></i>
+          
+          4 minute read
+        </div>
+        
+        
+        
+      </div>
+    </header>
+
+  
+    
+    <div id="toc">
+      <nav id="TableOfContents"></nav>
+    </div>
+    
+    <div class="content" itemprop="articleBody">
+      <ul>
+<li>
+<p><input checked="" disabled="" type="checkbox"> 内部类</p>
+<ol>
+<li>内部类提供了更精细的封装</li>
+<li>内部类是和外部类的实例相绑定的，它可以调用外部类的实例方法，包括被private修饰的方法或成员 内部类之所以能访问外部类的成员，是因为编译器帮你的内部类注入了一个<code>this$0</code>的外部类实例成员</li>
+<li>外部类也可以调用内部类中被private修饰的方法或成员变量</li>
+<li>内部类不一定非要定义在类中，也可以定义在接口，枚举中</li>
+</ol>
+</li>
+<li>
+<p><input checked="" disabled="" type="checkbox"> 静态内部类</p>
+<ol>
+<li>静态内部类不和实例绑定，因此它不能调用外部类的实例方法或成员变量</li>
+<li>静态内部类只能调用外部类中的静态变量或静态方法 不过还是有办法访问外部类中的非静态方法或成员，就是通过构造器将外部类的实例传进来</li>
+</ol>
+</li>
+<li>
+<p><input checked="" disabled="" type="checkbox"> 什么时候使用内部类，什么时候使用静态内部类？</p>
+<ol>
+<li>永远优先使用静态内部类，除非编译报错。 因为编译器偷偷帮你注入的外部类实例可能你用不到，造成浪费空间</li>
+</ol>
+</li>
+<li>
+<p><input checked="" disabled="" type="checkbox"> 匿名内部类</p>
+<ol>
+<li>new 一个接口并提供实现体，就相当于创建一个实现该接口的匿名内部类</li>
+<li>new 一个抽象类提供实现体，就相当于创建一个覆盖了对应方法的子类(匿名内部类)</li>
+<li>匿名内部类可以变为lambda表达式</li>
+<li>匿名内部类虽然没有名字，但在字节码的表示中是以外围类的名字+$数字来命名的</li>
+<li>匿名内部类也可以访问外围类中的实例变量或方法(类似其他语言中的闭包的概念)</li>
+</ol>
+</li>
+<li>
+<p><input checked="" disabled="" type="checkbox"> 在Java中Fork子进程</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">  <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Fork</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">static</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">main</span><span style="color:#000;font-weight:bold">(</span>String<span style="color:#000;font-weight:bold">[]</span> args<span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#998;font-style:italic">// 请在这里使用Java代码fork一个子进程，
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// 将fork的子进程的标准输出重定向到指定文件：工作目录下名为output.txt的文件
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// 工作目录是项目目录下的working-directory目录
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">//（可以用getWorkingDir()方法得到这个目录对应的File对象）
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// 传递的命令是sh run.sh
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">// 环境变量是AAA=123
+</span><span style="color:#998;font-style:italic"></span>        ProcessBuilder processBuilder <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> ProcessBuilder<span style="color:#000;font-weight:bold">(</span><span style="color:#d14">&#34;bash&#34;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#d14">&#34;run.sh&#34;</span><span style="color:#000;font-weight:bold">);</span>
+        processBuilder<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">directory</span><span style="color:#000;font-weight:bold">(</span>getWorkingDir<span style="color:#000;font-weight:bold">());</span>
+        Map<span style="color:#000;font-weight:bold">&lt;</span>String<span style="color:#000;font-weight:bold">,</span> String<span style="color:#000;font-weight:bold">&gt;</span> environment <span style="color:#000;font-weight:bold">=</span> processBuilder<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">environment</span><span style="color:#000;font-weight:bold">();</span>
+        environment<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">put</span><span style="color:#000;font-weight:bold">(</span><span style="color:#d14">&#34;AAA&#34;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#d14">&#34;123&#34;</span><span style="color:#000;font-weight:bold">);</span> <span style="color:#998;font-style:italic">// 设置新进程的环境变量
+</span><span style="color:#998;font-style:italic"></span>        <span style="color:#998;font-style:italic">//		 processBuilder.inheritIO(); // 将新进程的标准输入/输出全部打印到当前的进程中来
+</span><span style="color:#998;font-style:italic"></span>        processBuilder<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">redirectOutput</span><span style="color:#000;font-weight:bold">(</span>getOutputFile<span style="color:#000;font-weight:bold">());</span> <span style="color:#998;font-style:italic">// 将输出重定向到文件
+</span><span style="color:#998;font-style:italic"></span>        processBuilder<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">start</span><span style="color:#000;font-weight:bold">().</span><span style="color:#008080">waitFor</span><span style="color:#000;font-weight:bold">();</span> <span style="color:#998;font-style:italic">// 启动进程并等待其结束
+</span><span style="color:#998;font-style:italic"></span>    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> File <span style="color:#900;font-weight:bold">getWorkingDir</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+        Path projectDir <span style="color:#000;font-weight:bold">=</span> Paths<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">get</span><span style="color:#000;font-weight:bold">(</span>System<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">getProperty</span><span style="color:#000;font-weight:bold">(</span><span style="color:#d14">&#34;user.dir&#34;</span><span style="color:#000;font-weight:bold">));</span>
+        <span style="color:#000;font-weight:bold">return</span> projectDir<span style="color:#000;font-weight:bold">.</span><span style="color:#008080">resolve</span><span style="color:#000;font-weight:bold">(</span><span style="color:#d14">&#34;working-directory&#34;</span><span style="color:#000;font-weight:bold">).</span><span style="color:#008080">toFile</span><span style="color:#000;font-weight:bold">();</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#000;font-weight:bold">private</span> <span style="color:#000;font-weight:bold">static</span> File <span style="color:#900;font-weight:bold">getOutputFile</span><span style="color:#000;font-weight:bold">()</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">new</span> File<span style="color:#000;font-weight:bold">(</span>getWorkingDir<span style="color:#000;font-weight:bold">(),</span> <span style="color:#d14">&#34;output.txt&#34;</span><span style="color:#000;font-weight:bold">);</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></div><ul>
+<li><input checked="" disabled="" type="checkbox"> 用命令行编译Java程序
+<ol>
+<li>普通编译 <code>javac Hello.java</code></li>
+<li>编译并指定依赖类去哪里找 <code>javac -classpath commons-lang3-3.9.jar Hello.java</code></li>
+<li>向java传递参数 <code>java Hello 1 2 3</code></li>
+<li>向java传递系统属性 <code>java -DAA=123 Hello</code></li>
+<li>运行并指定依赖类去哪里找 <code>java -classpath commons-lang3-3.9.jar:. Hello</code></li>
+</ol>
+</li>
+</ul>
+
+    </div>
+  </article>
+
+  
+  
+
+
+
+
+  <div class="blog-post-comments">
+    
+      <div id="disquss_thread">
+  <script src="https://utteranc.es/client.js"
+    repo="Wjinlei/wjinlei.github.io"
+    issue-term="pathname"
+    label="Wjinlei"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+  </script>
+</div>
+
+    
+  </div>
+
+
+
+  <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/posts">Writings</a></li>
+         
+          <li><a href="/tags">Tags</a></li>
+         
+          <li><a href="/about">About</a></li>
+        
+      </ul>
+    </div>
+
+    
+
+    <div id="share-footer" style="display: none">
+      
+      <ul>
+  
+  
+    
+  
+  
+  <li>
+    <a class="icon" href="http://www.facebook.com/sharer.php?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f" aria-label="Facebook">
+      <i class="fab fa-facebook fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://twitter.com/share?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&text=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="Twitter">
+      <i class="fab fa-twitter fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.linkedin.com/shareArticle?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="Linkedin">
+      <i class="fab fa-linkedin fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&is_video=false&description=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="Pinterest">
+      <i class="fab fa-pinterest fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="mailto:?subject=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29&body=Check out this article: https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f" aria-label="Email">
+      <i class="fas fa-envelope fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://getpocket.com/save?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="Pocket">
+      <i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://reddit.com/submit?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&title=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="reddit">
+      <i class="fab fa-reddit fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="http://www.tumblr.com/share/link?url=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&name=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29&description=%e5%86%85%e9%83%a8%e7%b1%bb%0a%20%e5%86%85%e9%83%a8%e7%b1%bb%e6%8f%90%e4%be%9b%e4%ba%86%e6%9b%b4%e7%b2%be%e7%bb%86%e7%9a%84%e5%b0%81%e8%a3%85%20%e5%86%85%e9%83%a8%e7%b1%bb%e6%98%af%e5%92%8c%e5%a4%96%e9%83%a8%e7%b1%bb%e7%9a%84%e5%ae%9e%e4%be%8b%e7%9b%b8%e7%bb%91%e5%ae%9a%e7%9a%84%ef%bc%8c%e5%ae%83%e5%8f%af%e4%bb%a5%e8%b0%83%e7%94%a8%e5%a4%96%e9%83%a8%e7%b1%bb%e7%9a%84%e5%ae%9e%e4%be%8b%e6%96%b9%e6%b3%95%ef%bc%8c%e5%8c%85%e6%8b%ac%e8%a2%abprivate%e4%bf%ae%e9%a5%b0%e7%9a%84%e6%96%b9%e6%b3%95%e6%88%96%e6%88%90%e5%91%98%20%e5%86%85%e9%83%a8%e7%b1%bb%e4%b9%8b%e6%89%80%e4%bb%a5%e8%83%bd%e8%ae%bf%e9%97%ae%e5%a4%96%e9%83%a8%e7%b1%bb%e7%9a%84%e6%88%90%e5%91%98%ef%bc%8c%e6%98%af%e5%9b%a0%e4%b8%ba%e7%bc%96%e8%af%91%e5%99%a8%e5%b8%ae%e4%bd%a0%e7%9a%84%e5%86%85%e9%83%a8%e7%b1%bb%e6%b3%a8%e5%85%a5%e4%ba%86%e4%b8%80%e4%b8%aathis%240%e7%9a%84%e5%a4%96%e9%83%a8%e7%b1%bb%e5%ae%9e%e4%be%8b%e6%88%90%e5%91%98%20%e5%a4%96%e9%83%a8%e7%b1%bb%e4%b9%9f%e5%8f%af%e4%bb%a5%e8%b0%83%e7%94%a8%e5%86%85%e9%83%a8%e7%b1%bb%e4%b8%ad%e8%a2%abprivate%e4%bf%ae%e9%a5%b0%e7%9a%84%e6%96%b9%e6%b3%95%e6%88%96%e6%88%90%e5%91%98%e5%8f%98%e9%87%8f%20%e5%86%85%e9%83%a8%e7%b1%bb%e4%b8%8d%e4%b8%80%e5%ae%9a%e9%9d%9e%e8%a6%81%e5%ae%9a%e4%b9%89%e5%9c%a8%e7%b1%bb%e4%b8%ad%ef%bc%8c%e4%b9%9f%e5%8f%af%e4%bb%a5%e5%ae%9a%e4%b9%89%e5%9c%a8%e6%8e%a5%e5%8f%a3%ef%bc%8c%e6%9e%9a%e4%b8%be%e4%b8%ad%20%20%20%20%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%0a%20%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%e4%b8%8d%e5%92%8c%e5%ae%9e%e4%be%8b%e7%bb%91%e5%ae%9a%ef%bc%8c%e5%9b%a0%e6%ad%a4%e5%ae%83%e4%b8%8d%e8%83%bd%e8%b0%83%e7%94%a8%e5%a4%96%e9%83%a8%e7%b1%bb%e7%9a%84%e5%ae%9e%e4%be%8b%e6%96%b9%e6%b3%95%e6%88%96%e6%88%90%e5%91%98%e5%8f%98%e9%87%8f%20%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%e5%8f%aa%e8%83%bd%e8%b0%83%e7%94%a8%e5%a4%96%e9%83%a8%e7%b1%bb%e4%b8%ad%e7%9a%84%e9%9d%99%e6%80%81%e5%8f%98%e9%87%8f%e6%88%96%e9%9d%99%e6%80%81%e6%96%b9%e6%b3%95%20%e4%b8%8d%e8%bf%87%e8%bf%98%e6%98%af%e6%9c%89%e5%8a%9e%e6%b3%95%e8%ae%bf%e9%97%ae%e5%a4%96%e9%83%a8%e7%b1%bb%e4%b8%ad%e7%9a%84%e9%9d%9e%e9%9d%99%e6%80%81%e6%96%b9%e6%b3%95%e6%88%96%e6%88%90%e5%91%98%ef%bc%8c%e5%b0%b1%e6%98%af%e9%80%9a%e8%bf%87%e6%9e%84%e9%80%a0%e5%99%a8%e5%b0%86%e5%a4%96%e9%83%a8%e7%b1%bb%e7%9a%84%e5%ae%9e%e4%be%8b%e4%bc%a0%e8%bf%9b%e6%9d%a5%20%20%20%20%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e4%bd%bf%e7%94%a8%e5%86%85%e9%83%a8%e7%b1%bb%ef%bc%8c%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e4%bd%bf%e7%94%a8%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%ef%bc%9f%0a%20%e6%b0%b8%e8%bf%9c%e4%bc%98%e5%85%88%e4%bd%bf%e7%94%a8%e9%9d%99%e6%80%81%e5%86%85%e9%83%a8%e7%b1%bb%ef%bc%8c%e9%99%a4%e9%9d%9e%e7%bc%96%e8%af%91%e6%8a%a5%e9%94%99%e3%80%82%20%e5%9b%a0%e4%b8%ba%e7%bc%96%e8%af%91%e5%99%a8%e5%81%b7%e5%81%b7%e5%b8%ae%e4%bd%a0%e6%b3%a8%e5%85%a5%e7%9a%84%e5%a4%96%e9%83%a8%e7%b1%bb%e5%ae%9e%e4%be%8b%e5%8f%af%e8%83%bd%e4%bd%a0%e7%94%a8%e4%b8%8d%e5%88%b0%ef%bc%8c%e9%80%a0%e6%88%90%e6%b5%aa%e8%b4%b9%e7%a9%ba%e9%97%b4%20%20%20%20%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%0a%20new%20%e4%b8%80%e4%b8%aa%e6%8e%a5%e5%8f%a3%e5%b9%b6%e6%8f%90%e4%be%9b%e5%ae%9e%e7%8e%b0%e4%bd%93%ef%bc%8c%e5%b0%b1%e7%9b%b8%e5%bd%93%e4%ba%8e%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa%e5%ae%9e%e7%8e%b0%e8%af%a5%e6%8e%a5%e5%8f%a3%e7%9a%84%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%20new%20%e4%b8%80%e4%b8%aa%e6%8a%bd%e8%b1%a1%e7%b1%bb%e6%8f%90%e4%be%9b%e5%ae%9e%e7%8e%b0%e4%bd%93%ef%bc%8c%e5%b0%b1%e7%9b%b8%e5%bd%93%e4%ba%8e%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa%e8%a6%86%e7%9b%96%e4%ba%86%e5%af%b9%e5%ba%94%e6%96%b9%e6%b3%95%e7%9a%84%e5%ad%90%e7%b1%bb%28%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%29%20%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%e5%8f%af%e4%bb%a5%e5%8f%98%e4%b8%balambda%e8%a1%a8%e8%be%be%e5%bc%8f%20%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%e8%99%bd%e7%84%b6%e6%b2%a1%e6%9c%89%e5%90%8d%e5%ad%97%ef%bc%8c%e4%bd%86%e5%9c%a8%e5%ad%97%e8%8a%82%e7%a0%81%e7%9a%84%e8%a1%a8%e7%a4%ba%e4%b8%ad%e6%98%af%e4%bb%a5%e5%a4%96%e5%9b%b4%e7%b1%bb%e7%9a%84%e5%90%8d%e5%ad%97%2b%24%e6%95%b0%e5%ad%97%e6%9d%a5%e5%91%bd%e5%90%8d%e7%9a%84%20%e5%8c%bf%e5%90%8d%e5%86%85%e9%83%a8%e7%b1%bb%e4%b9%9f%e5%8f%af%e4%bb%a5%e8%ae%bf%e9%97%ae%e5%a4%96%e5%9b%b4%e7%b1%bb%e4%b8%ad%e7%9a%84%e5%ae%9e%e4%be%8b%e5%8f%98%e9%87%8f%e6%88%96%e6%96%b9%e6%b3%95%28%e7%b1%bb%e4%bc%bc%e5%85%b6%e4%bb%96%e8%af%ad%e8%a8%80%e4%b8%ad%e7%9a%84%e9%97%ad%e5%8c%85%e7%9a%84%e6%a6%82%e5%bf%b5%29%20%20%20%20%e5%9c%a8Java%e4%b8%adFork%e5%ad%90%e8%bf%9b%e7%a8%8b%0a%20%20public%20class%20Fork%20%7b%20public%20static%20void%20main%28String%5b%5d%20args%29%20%7b%20%2f%2f%20%e8%af%b7%e5%9c%a8%e8%bf%99%e9%87%8c%e4%bd%bf%e7%94%a8Java%e4%bb%a3%e7%a0%81fork%e4%b8%80%e4%b8%aa%e5%ad%90%e8%bf%9b%e7%a8%8b%ef%bc%8c%20%20%2f%2f%20%e5%b0%86fork%e7%9a%84%e5%ad%90%e8%bf%9b%e7%a8%8b%e7%9a%84%e6%a0%87%e5%87%86%e8%be%93%e5%87%ba%e9%87%8d%e5%ae%9a%e5%90%91%e5%88%b0%e6%8c%87%e5%ae%9a%e6%96%87%e4%bb%b6%ef%bc%9a%e5%b7%a5%e4%bd%9c%e7%9b%ae%e5%bd%95%e4%b8%8b%e5%90%8d%e4%b8%baoutput.txt%e7%9a%84%e6%96%87%e4%bb%b6%20%20%2f%2f%20%e5%b7%a5%e4%bd%9c%e7%9b%ae%e5%bd%95%e6%98%af%e9%a1%b9%e7%9b%ae%e7%9b%ae%e5%bd%95%e4%b8%8b%e7%9a%84working-directory%e7%9b%ae%e5%bd%95%20%20%2f%2f%ef%bc%88%e5%8f%af%e4%bb%a5%e7%94%a8getWorkingDir%28%29%e6%96%b9%e6%b3%95%e5%be%97%e5%88%b0%e8%bf%99%e4%b8%aa%e7%9b%ae%e5%bd%95%e5%af%b9%e5%ba%94%e7%9a%84File%e5%af%b9%e8%b1%a1%ef%bc%89%20%20%2f%2f%20%e4%bc%a0%e9%80%92%e7%9a%84%e5%91%bd%e4%bb%a4%e6%98%afsh%20run.sh%20%20%2f%2f%20%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f%e6%98%afAAA%3d123%20%20ProcessBuilder%20processBuilder%20%3d%20new%20ProcessBuilder%28%26%2334%3bbash%26%2334%3b%2c%20%26%2334%3brun." aria-label="Tumblr">
+      <i class="fab fa-tumblr fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+  <li>
+    <a class="icon" href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fwjinlei.github.io%2fposts%2fexp-java-day7%2f&t=Java%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%28%e7%ac%ac%e4%b8%83%e5%a4%a9%29" aria-label="Hacker News">
+      <i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      
+        <a id="menu-toggle" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;" aria-label="Menu">
+          <i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+        <a id="share-toggle" class="icon" href="#" onclick="$('#share-footer').toggle();return false;" aria-label="Share">
+          <i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" aria-label="Top of Page">
+          <i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+
+  <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2021  this 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/posts">Writings</a></li>
+         
+        <li><a href="/tags">Tags</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+
+<script src=/js/code-copy.js></script>
+
+
+
+
+</html>
