@@ -1,0 +1,13 @@
+https://realpython.com/python-web-applications-with-flask-part-ii/
+https://realpython.com/migrating-your-django-project-to-heroku/
+https://realpython.com/generating-code-documentation-with-pycco/
+https://realpython.com/an-effective-sales-page-with-bootstrap-3/
+https://realpython.com/getting-started-with-bootstrap-3/
+https://realpython.com/testing-in-django-part-2-model-mommy-vs-django-testing-fixtures/
+https://realpython.com/python-web-applications-with-flask-part-i/
+https://realpython.com/testing-in-django-part-1-best-practices-and-examples/
+https://realpython.com/create-a-super-basic-rest-api-with-django-tastypie/
+https://realpython.com/developing-with-bottle-part-2-plot-ly-api/
+https://realpython.com/headless-selenium-testing-with-python-and-phantomjs/
+https://realpython.com/web2py-migrating-from-sqlite-to-mysql/
+https://realpython.com/developing-with-bottle-part-1/
