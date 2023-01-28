@@ -70,7 +70,7 @@ def getOnlineRes():
         info = {
             'user_id': l['userId'],
             'user_nick': re.sub(rstr, "_", l['userNick']),
-            'title': re.sub(rstr, "_", l['title']),
+            'title': re.sub(rstr, "_", l['channelTitle']),
         }
         users.append(info)
 
