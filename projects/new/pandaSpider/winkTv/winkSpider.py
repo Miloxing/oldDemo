@@ -1,5 +1,6 @@
 # coding:utf-8
 import os
+import random
 import re
 import shutil
 import sys
@@ -59,9 +60,12 @@ def getOnlineRes():
         'height': '158',
         'imageResize': 'crop'
     }
-
-    response = requests.post(
-        'https://api.winktv.co.kr/v1/live/bookmark', headers=headers, data=data, proxies=proxies)
+    try:
+        response = requests.post(
+            'https://api.winktv.co.kr/v1/live/bookmark', headers=headers, data=data, proxies=proxies)
+    except Exception as e:
+        print(e)
+        return
 
     onLineBjs = json.loads(response.text)['list']
     users = []
@@ -185,10 +189,17 @@ def get_hls(uid):
 
 # 检查登录状态
 def check_login():
-    response = requests.post(
-        'https://api.winktv.co.kr/v1/member/login_info', headers=headers, proxies=proxies, timeout=5
-    )
-    return response.json()['result']
+    while True:
+        try:
+            response = requests.post(
+                'https://api.winktv.co.kr/v1/member/login_info', headers=headers, proxies=proxies, timeout=5
+            )
+            return response.json()['result']
+        except Exception as e:
+            print(e)
+        time.sleep(random.randint(5, 8))
+
+
 
 
 def start_process(uid, nick, text):
@@ -201,7 +212,11 @@ def start_process(uid, nick, text):
 
 
 def start_record(user_id, user_nick, title):
-    hls = get_hls(user_id)
+    try:
+        hls = get_hls(user_id)
+    except Exception as e:
+        print(e)
+        hls = ''
     if not hls:
         return
     session = streamlink.Streamlink()
