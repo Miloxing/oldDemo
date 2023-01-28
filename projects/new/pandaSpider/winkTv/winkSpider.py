@@ -160,10 +160,15 @@ def get_hls(uid):
         isget = _data['result']
         if not isget:
             if 'needUnlimitItem' in response.text:
-                sys.stdout.write(f'\r\033[K{user_id}满，重试')
+                sys.stdout.write(f'\r\033[K{uid}人数满，重试')
                 time.sleep(0.5)
             elif 'needPw' in response.text:
-                print(f'\r\033[K{user_id}需要密码')
+                print(f'\r\033[K{uid}需要密码')
+                break
+            elif 'needCoin' in response.text:
+                sys.stdout.write(f'\r\033[K{uid}需要硬币')
+            elif 'castEnd' in response.text:
+                sys.stdout.write(f'\r\033[K{uid}已结束直播')
                 break
             else:
                 print(_data)
@@ -274,6 +279,7 @@ def start_record(user_id, user_nick, title):
 if __name__ == '__main__':
     while True:
         is_login = check_login()
+        print('当前登录状态: ', is_login)
         if is_login:
             onlineList = getOnlineRes()
             if onlineList:
