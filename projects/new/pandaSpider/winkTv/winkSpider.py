@@ -1,18 +1,27 @@
 # coding:utf-8
+import os
+import re
+import shutil
+import sys
+
 import requests
 import json
 import time
+from threading import Thread
+from multiprocessing import Process
+
+import streamlink
 
 headers = {
-    'authority': 'api.pandalive.co.kr',
+    'authority': 'api.winktv.co.kr',
     'accept': 'application/json, text/plain, */*',
     'accept-language': 'zh-CN,zh;q=0.9,zh-RU;q=0.8,en-RU;q=0.7,en;q=0.6',
     'cache-control': 'no-cache',
     'content-type': 'application/x-www-form-urlencoded',
-    'cookie': 'userLoginSaveYN=Y; userLoginSaveID=WTJocWFERTVPVEU9; _gcl_au=1.1.894357695.1667040572; _ga=GA1.3.1009708996.1657246450; _ga_W91XDLC3YE=GS1.1.1667284058.21.1.1667284137.0.0.0; _ga_NGSHFJTQS1=GS1.1.1667284059.21.1.1667284137.0.0.0; partner=pandatv; sessKey=0be0c7cda5b3fe04b2140f771867075f6a0244dada73d6176d5b4d9a942169b4; userLoginYN=Y; userLoginIdx=1783371; 3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16=Y1NeO0USeqjGfGooBn%2BROiC0heNY9sZHrGkeLQ9qCS5nMCnGjhtKsFSOMsFw0rYRZt98927Bw3uSpj1DbafIGmQcDJw14shk6fQ0bih1J6gGgwEJeLpTHPFnUhv72VbeuE5gGwIak539vDXm2rFenGCu6DjdUI60%2BKrZMN4yzCYe6U9BHBDR5vNieNaHc4uv',
-    'origin': 'https://www.pandalive.co.kr',
+    'cookie': 'userLoginSaveYN=Y; userLoginSaveID=YzJWdWFXRTBaWFpsY2c9PQ%3D%3D; _gcl_au=1.1.894357695.1667040572; _ga=GA1.3.1009708996.1657246450; _ga_W91XDLC3YE=GS1.1.1667284058.21.1.1667284137.0.0.0; _ga_NGSHFJTQS1=GS1.1.1667284059.21.1.1667284137.0.0.0; partner=winktv; sessKey=f3186e501dcc692b34acb07f9eb63ba94b0a4114be4349c7003f6747f3908a08; userLoginYN=Y; userLoginIdx=9991318; 3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16=D1DgYEWN6RnkUpwU0tUYDXbVZNzWD2PaZgH9nA%2F2GNN1C9CW7oBcytnxbtZsv6ee8O8HHN2wpY6d9k%2FMiHCRK65feGZPfldLZ8ruufto220HBk8B7gDlHtDgLifE4%2Fao3i0HyAUALEfR116yV8ZEbYJQk51Pi%2FlprL%2Br9QkcwoEglhH349ECqQM6ljSkkDc5',
+    'origin': 'https://www.winktv.co.kr',
     'pragma': 'no-cache',
-    'referer': 'https://www.pandalive.co.kr/',
+    'referer': 'https://www.winktv.co.kr/',
     'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"macOS"',
@@ -24,19 +33,24 @@ headers = {
 }
 
 data = {
-  'offset': '0',
-  'limit': '20',
-  'isLive': 'Y',
-  'width': '280',
-  'height': '158',
-  'imageResize': 'crop'
+    'offset': '0',
+    'limit': '20',
+    'isLive': 'Y',
+    'width': '280',
+    'height': '158',
+    'imageResize': 'crop'
 }
+rstr = r"[\/\\\:\*\?\"\<\>\|\- \n]"
+recording = []
+proxies = {'https': '81.70.13.235:3247'}
+trytimes = 1  # input('重试次数')
+threads = 1  # input('线程数')
 
-# response = requests.post('https://api.pandalive.co.kr/v1/live/bookmark', headers=headers, data=data)
+
+# response = requests.post('https://api.winktv.co.kr/v1/live/bookmark', headers=headers, data=data)
 
 # 得到在线订阅
 def getOnlineRes():
-
     data = {
         'offset': '0',
         'limit': '120',
@@ -47,11 +61,20 @@ def getOnlineRes():
     }
 
     response = requests.post(
-        'https://api.pandalive.co.kr/v1/live/bookmark', headers=headers, data=data)
+        'https://api.winktv.co.kr/v1/live/bookmark', headers=headers, data=data)
 
     onLineBjs = json.loads(response.text)['list']
+    users = []
 
-    return [l['userId'] for l in onLineBjs]
+    for l in onLineBjs:
+        info = {
+            'user_id': l['userId'],
+            'user_nick': re.sub(rstr, "_", l['userNick']),
+            'title': re.sub(rstr, "_", l['title']),
+        }
+        users.append(info)
+
+    return users
 
 
 # 得到所有订阅
@@ -66,10 +89,11 @@ def getAllRes():
     }
 
     response = requests.post(
-        'https://api.pandalive.co.kr/v1/live/bookmark', headers=headers, data=data)
+        'https://api.winktv.co.kr/v1/live/bookmark', headers=headers, data=data)
     allMarkRes = json.loads(response.text)['list']
     print(len([l['userId'] for l in allMarkRes]))
     # l['media']['isLive'] == 'true'
+
 
 # getAllRes()
 
@@ -93,8 +117,7 @@ def getAllRes():
 #         break
 
 # 得到特别订阅 hls 源
-def getHlsRes(onlineList):
-
+def get_hls(uid):
     # onlineId = ''
 
     data = {
@@ -109,33 +132,162 @@ def getHlsRes(onlineList):
         'fanIconImageResize': 'crop'
     }
 
-    specialFavList = ['lilac0510', 'apirl01', 'lovesther01', 'ladys77', 'xltb7482',
-           'double101', 'sigee111', 'tomato100', 'srkcom', 'jinricrew1', '5721004', 'lululemon026', 'luv333', 'bongbong486', 'o111na', 'becomegodjuliet']
+    # specialFavList = ['lilac0510', 'apirl01', 'lovesther01', 'ladys77', 'xltb7482',
+    #                   'double101', 'sigee111', 'tomato100', 'srkcom', 'jinricrew1', '5721004', 'lululemon026', 'luv333',
+    #                   'bongbong486', 'o111na', 'becomegodjuliet']
 
+    # for onlineId in onlineList:
+    #     if onlineId in specialFavList:
+    #         data['userId'] = onlineId
+    #         # print(data)
+    #
+    #         response = requests.post(
+    #             'https://api.winktv.co.kr/v1/live/play', headers=headers, data=data)
+    #
+    #         hlsList = json.loads(response.text)['PlayList']['hls3'][0]['url']
+    #
+    #         print(f"{onlineId} 在线，hls 源为 {hlsList}\r\n")
+    #
+    #         time.sleep(3)
+    #         # print(f"{onlineId} 不在线\r\n")
 
-    for onlineId in onlineList:
-        if onlineId in specialFavList:
-            data['userId'] = onlineId
-            # print(data)
+    data['userId'] = uid
 
-            response = requests.post(
-                'https://api.pandalive.co.kr/v1/live/play', headers=headers, data=data)
-
-            hlsList = json.loads(response.text)['PlayList']['hls3'][0]['url']
-
-            print(f"{onlineId} 在线，hls 源为 {hlsList}\r\n")
-
-            time.sleep(3)
-            # print(f"{onlineId} 不在线\r\n")
-
-
-while True:
-    onlineList = getOnlineRes()
-    if onlineList:
-        getHlsRes(onlineList)
-        print("等待再次检测")
-        print(time.strftime('%H:%M:%S',time.localtime(time.time())))
-        print('\r\n' + '*'*20 + '\r\n')
-        time.sleep(30)
-    else:
+    while True:
+        response = requests.post(
+            'https://api.winktv.co.kr/v1/live/play', headers=headers, data=data)
+        data = response.json()
+        isget = data['result']
+        if not isget:
+            if 'needUnlimitItem' in response.text:
+                sys.stdout.write(f'\r\033[K{user_id}满，重试')
+                time.sleep(0.5)
+            elif 'needPw' in response.text:
+                print(f'\r\033[K{user_id}需要密码')
+                break
+            else:
+                print(data)
+                time.sleep(5)
+            continue
         break
+    hls = ''
+    try:
+        hls = ['PlayList']['hls3'][0]['url']
+    except AttributeError as e:
+        print(uid, e)
+    return hls
+
+
+# 检查登录状态
+def check_login():
+    response = requests.post(
+        'https://api.winktv.co.kr/v1/member/login_info', headers=headers, proxies=proxies
+    )
+    return response.json()['result']
+
+
+def start_process(uid, nick, text):
+    if uid not in recording:
+        recording.append(uid)
+        process = Process(target=start_record, args=(uid, nick, text))
+        process.start()
+        process.join()
+        recording.remove(uid)
+
+
+def start_record(user_id, user_nick, title):
+    hls = get_hls(user_id)
+    if not hls:
+        return
+    session = streamlink.Streamlink()
+    if threads:
+        session.set_option('hls-segment-threads', int(threads))
+    if trytimes:
+        session.set_option('hls-segment-attempts', int(trytimes))
+    session.set_option('hls-live-edge', 9999)
+    try:
+        streams = session.streams('hlsvariant://' + hls)
+        stream = streams['best']
+    except Exception as e:
+        print(e)
+        if 'streams' in locals():
+            print(user_id, streams)
+        return
+    filename = f"{user_id}-{time.strftime('%y%m%d_%H%M%S')}-{user_nick}-{title}.ts"
+    opath = "/root/b/d/kr"
+    path = os.path.join(opath, user_id)
+    try:
+        fd = stream.open()
+        if not os.path.exists(path):
+            os.makedirs(path)
+        else:
+            files = os.listdir(path)
+            for file in files:
+                fp = os.path.join(path, file)
+                shutil.move(fp, opath)
+        filepath = os.path.join(path, filename)
+        try:
+            f = open(filepath, 'wb')
+        except:
+            title = '_'
+            filename = f"{user_id}-{time.strftime('%y%m%d_%H%M%S')}-{user_nick}-{title}.ts"
+            filepath = os.path.join(path, filename)
+            f = open(filepath, 'wb')
+        readsize = 1024 * 8
+        limitsize = 1024 * 1024 * 1024
+        fs = 0
+        print(f"\r\033[K{user_id} {user_nick} start recording")
+        while 1:
+            data = fd.read(readsize)
+            if data:
+                fs += f.write(data)
+                if fs >= limitsize:
+                    f.close()
+                    shutil.move(filepath, opath)
+                    filename = f"{user_id}-{time.strftime('%y%m%d_%H%M%S')}-{user_nick}-{title}.ts"
+                    filepath = os.path.join(path, filename)
+                    f = open(filepath, 'wb')
+                    fs = 0
+            else:
+                break
+    except Exception as e:
+        print(f"\r\033[K{e}")
+    finally:
+        print(f"\r\033[K{user_id} {user_nick} recording end")
+        if 'f' in locals():
+            f.close()
+            try:
+                shutil.move(filepath, opath)
+            except:
+                pass
+        if 'fd' in locals():
+            fd.close()
+        try:
+            print(f"\r\033[K{user_id} {user_nick} recording end")
+            files = os.listdir(path)
+            if not files:
+                os.rmdir(path)
+        except:
+            pass
+
+
+if __name__ == '__main__':
+    while True:
+        is_login = check_login()
+        if is_login:
+            onlineList = getOnlineRes()
+            if onlineList:
+                for online in onlineList:
+                    user_id, user_nick, title = online['user_id'], online['user_nick'], online['title']
+                    if user_id not in recording:
+                        th = Thread(target=start_process, args=(user_id, user_nick, title,), name=user_id)
+                        th.start()
+            else:
+                print('没有在线关注')
+            print("等待再次检测")
+            print(time.strftime('%H:%M:%S', time.localtime(time.time())))
+            print('\r\n' + '*' * 20 + '\r\n')
+            time.sleep(30)
+        else:
+            print("登录状态失效，请更新")
+            time.sleep(600)
