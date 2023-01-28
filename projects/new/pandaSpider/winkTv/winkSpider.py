@@ -307,7 +307,7 @@ if __name__ == '__main__':
                 print('没有在线关注')
             print("等待再次检测")
             print(time.strftime('%H:%M:%S', time.localtime(time.time())))
-            print('\r\n' + '*' * 20 + '\r\n')
+            print('\r\n' + '*' * 20 + '\r\b\b\b\b\b')
             time.sleep(30)
         else:
             print("登录状态失效，请更新")
