@@ -61,7 +61,7 @@ def getOnlineRes():
     }
 
     response = requests.post(
-        'https://api.winktv.co.kr/v1/live/bookmark', headers=headers, data=data)
+        'https://api.winktv.co.kr/v1/live/bookmark', headers=headers, data=data, proxies=proxies)
 
     onLineBjs = json.loads(response.text)['list']
     users = []
@@ -155,9 +155,9 @@ def get_hls(uid):
 
     while True:
         response = requests.post(
-            'https://api.winktv.co.kr/v1/live/play', headers=headers, data=data)
-        data = response.json()
-        isget = data['result']
+            'https://api.winktv.co.kr/v1/live/play', headers=headers, data=data, proxies=proxies)
+        _data = response.json()
+        isget = _data['result']
         if not isget:
             if 'needUnlimitItem' in response.text:
                 sys.stdout.write(f'\r\033[K{user_id}满，重试')
@@ -166,13 +166,13 @@ def get_hls(uid):
                 print(f'\r\033[K{user_id}需要密码')
                 break
             else:
-                print(data)
+                print(_data)
                 time.sleep(5)
             continue
         break
     hls = ''
     try:
-        hls = ['PlayList']['hls3'][0]['url']
+        hls = _data['PlayList']['hls3'][0]['url']
     except AttributeError as e:
         print(uid, e)
     return hls
@@ -181,7 +181,7 @@ def get_hls(uid):
 # 检查登录状态
 def check_login():
     response = requests.post(
-        'https://api.winktv.co.kr/v1/member/login_info', headers=headers, proxies=proxies
+        'https://api.winktv.co.kr/v1/member/login_info', headers=headers, proxies=proxies, timeout=5
     )
     return response.json()['result']
 
