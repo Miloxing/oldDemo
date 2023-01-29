@@ -304,8 +304,8 @@ if __name__ == '__main__':
                         th = Thread(target=start_process, args=(user_id, user_nick, title,), name=user_id)
                         th.start()
             else:
-                print('没有在线关注')
-            print("等待再次检测")
+                sys.stdout.write('\r\033[K没有在线关注')
+            print("\r\033[K等待再次检测")
             print(time.strftime('%H:%M:%S', time.localtime(time.time())))
             print('\r\n' + '*' * 20 + '\033[F\033[F\033[F\033[F\033[F\r')
             time.sleep(30)
