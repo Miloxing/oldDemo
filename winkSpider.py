@@ -43,9 +43,15 @@ data = {
 }
 rstr = r"[\/\\\:\*\?\"\<\>\|\- \n]"
 recording = []
-proxies = {'https': '81.70.13.235:3247'}
+proxies = {}#{'https': '81.70.13.235:3247'}
 trytimes = 1  # input('重试次数')
 threads = 1  # input('线程数')
+wait=False
+
+def get_free_size():
+    info = os.statvfs('/')
+    free_size = info.f_bsize * info.f_bavail / 1024 / 1024 / 1024  #GB
+    return round(free_size, 2)
 
 
 # response = requests.post('https://api.winktv.co.kr/v1/live/bookmark', headers=headers, data=data)
@@ -205,13 +211,16 @@ def check_login():
 def start_process(uid, nick, text):
     if uid not in recording:
         recording.append(uid)
-        process = Process(target=start_record, args=(uid, nick, text))
-        process.start()
-        process.join()
+        ##取消子进程
+        #process = Process(target=start_record, args=(uid, nick, text),daemon=True)
+        #process.start()
+        #process.join()
+        start_record(uid,nick,text)
         recording.remove(uid)
 
 
 def start_record(user_id, user_nick, title):
+    global wait
     try:
         hls = get_hls(user_id)
     except Exception as e:
@@ -259,7 +268,7 @@ def start_record(user_id, user_nick, title):
         print(f"\r\033[K{user_id} {user_nick} start recording")
         while 1:
             data = fd.read(readsize)
-            if data:
+            if data and not wait:
                 fs += f.write(data)
                 if fs >= limitsize:
                     f.close()
@@ -293,6 +302,14 @@ def start_record(user_id, user_nick, title):
 
 if __name__ == '__main__':
     while True:
+        free_size = get_free_size()
+        if free_size <= 20 or (wait and free_size <= 25):
+            sys.stdout.write(f"\r\033[Kfree size {free_size}G, stop downloading")
+            wait=True
+            time.sleep(10)
+            continue
+        wait=False
+
         is_login = check_login()
         print('当前登录状态: ', is_login)
         if is_login:
@@ -301,7 +318,7 @@ if __name__ == '__main__':
                 for online in onlineList:
                     user_id, user_nick, title = online['user_id'], online['user_nick'], online['title']
                     if user_id not in recording:
-                        th = Thread(target=start_process, args=(user_id, user_nick, title,), name=user_id)
+                        th = Thread(target=start_process, args=(user_id, user_nick, title,), name=user_id, daemon=True)
                         th.start()
             else:
                 sys.stdout.write('\r\033[K没有在线关注')
