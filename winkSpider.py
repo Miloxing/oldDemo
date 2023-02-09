@@ -9,7 +9,7 @@ import requests
 import json
 import time
 from threading import Thread
-from multiprocessing import Process, Pool, Manager, Value
+from multiprocessing import Process  # , Pool, Manager, Value
 
 import streamlink
 
@@ -20,7 +20,7 @@ headers = {
     'cache-control': 'no-cache',
     'content-type': 'application/x-www-form-urlencoded',
     'cookie': 'userLoginSaveYN=Y; userLoginSaveID=YzJWdWFXRTBaWFpsY2c9PQ%3D%3D; partner=winktv; sessKey=7011f42b09994ee3738938363e00e53b5aae354e14e5d45603db2cf264c5fe91; userLoginIdx=9991318; userLoginYN=Y; 3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16=teL7pUma2a7zlOgK3ieuooWSX0Uqpcg%2BaUJuMcoPVvlfCQyaWWZmJQNTL8L03vTwbYBjZZ%2FxXSfL0rPpq5Ca4yHBunZfRC6Rirw2Bf1fbOGugFs510jtPq8kMIGKcMNRQzsdcu5RBxI2otp%2BTrPAb71QRW1JFjCLsEzd1h8fL1uL3SqBsS9kWkRWwWFbmJA0',
-    #'userLoginSaveYN=Y; userLoginSaveID=YzJWdWFXRTBaWFpsY2c9PQ%3D%3D; _gcl_au=1.1.894357695.1667040572; _ga=GA1.3.1009708996.1657246450; _ga_W91XDLC3YE=GS1.1.1667284058.21.1.1667284137.0.0.0; _ga_NGSHFJTQS1=GS1.1.1667284059.21.1.1667284137.0.0.0; partner=winktv; sessKey=f3186e501dcc692b34acb07f9eb63ba94b0a4114be4349c7003f6747f3908a08; userLoginYN=Y; userLoginIdx=9991318; 3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16=D1DgYEWN6RnkUpwU0tUYDXbVZNzWD2PaZgH9nA%2F2GNN1C9CW7oBcytnxbtZsv6ee8O8HHN2wpY6d9k%2FMiHCRK65feGZPfldLZ8ruufto220HBk8B7gDlHtDgLifE4%2Fao3i0HyAUALEfR116yV8ZEbYJQk51Pi%2FlprL%2Br9QkcwoEglhH349ECqQM6ljSkkDc5',
+    # 'userLoginSaveYN=Y; userLoginSaveID=YzJWdWFXRTBaWFpsY2c9PQ%3D%3D; _gcl_au=1.1.894357695.1667040572; _ga=GA1.3.1009708996.1657246450; _ga_W91XDLC3YE=GS1.1.1667284058.21.1.1667284137.0.0.0; _ga_NGSHFJTQS1=GS1.1.1667284059.21.1.1667284137.0.0.0; partner=winktv; sessKey=f3186e501dcc692b34acb07f9eb63ba94b0a4114be4349c7003f6747f3908a08; userLoginYN=Y; userLoginIdx=9991318; 3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16=D1DgYEWN6RnkUpwU0tUYDXbVZNzWD2PaZgH9nA%2F2GNN1C9CW7oBcytnxbtZsv6ee8O8HHN2wpY6d9k%2FMiHCRK65feGZPfldLZ8ruufto220HBk8B7gDlHtDgLifE4%2Fao3i0HyAUALEfR116yV8ZEbYJQk51Pi%2FlprL%2Br9QkcwoEglhH349ECqQM6ljSkkDc5',
     'origin': 'https://www.winktv.co.kr',
     'pragma': 'no-cache',
     'referer': 'https://www.winktv.co.kr/',
@@ -44,21 +44,22 @@ data = {
 }
 rstr = r"[\/\\\:\*\?\"\<\>\|\- \n]"
 recording = []
-proxies = {}#{'https': '81.70.13.235:3247'}
+proxies = {}  # {'https': '81.70.13.235:3247'}
 trytimes = 1  # input('重试次数')
 threads = 1  # input('线程数')
-wait=False
-wait=Value('i',0)
-keep=[]
-manager = Manager()
-keep=manager.list()
-free_size=0
-free_size=Value('f',0)
+wait = 0  # False
+# wait = Value('i', 0)
+keep = []
+# manager = Manager()
+# keep = manager.list()
+free_size = 0
+# free_size = Value('f', 0)
+
 
 def get_free_size():
     info = os.statvfs('/')
-    free_size = info.f_bsize * info.f_bavail / 1024 / 1024 / 1024  #GB
-    free_size = Value('f',round(free_size,2))
+    free_size = round(info.f_bsize * info.f_bavail / 1024 / 1024 / 1024, 2)  # GB
+    # free_size = Value('f', round(free_size, 2))
     return free_size
 
 
@@ -214,16 +215,14 @@ def check_login():
         time.sleep(random.randint(5, 8))
 
 
-
-
 def start_process(uid, nick, text):
     if uid not in recording:
         recording.append(uid)
         ##取消子进程
-        process = Process(target=start_record, args=(uid, nick, text),daemon=True)
-        process.start()
-        process.join()
-        #start_record(uid,nick,text)
+        # process = Process(target=start_record, args=(uid, nick, text), daemon=True)
+        # process.start()
+        # process.join()
+        start_record(uid,nick,text)
         recording.remove(uid)
 
 
@@ -276,7 +275,7 @@ def start_record(user_id, user_nick, title):
         print(f"\r\033[K{user_id} {user_nick} start recording")
         while 1:
             data = fd.read(readsize)
-            if data and (not wait.value or user_id in keep):
+            if data and (not wait or user_id in keep):
                 fs += f.write(data)
                 if fs >= limitsize:
                     f.close()
@@ -312,23 +311,26 @@ def run():
     global free_size
     global keep
     global wait
-    free_size=get_free_size()
-    keep=get_keep_list()
-    if free_size.value <= 30 or (wait.value and free_size.value <= 35):
+    free_size = get_free_size()
+    keep = get_keep_list()
+    # if free_size.value <= 30 or (wait.value and free_size.value <= 35):
+    if free_size <= 30 or (wait and free_size <= 35):
         sys.stdout.write(f"\r\033[K剩余空间{free_size}G, 停止下载")
-        wait.value=1
+        wait = 1
     else:
-        wait.value=0
+        wait = 0
+
 
 def get_keep_list():
     try:
-        keeps=open('./keep.txt').read().splitlines()
-        for i in keeps:
-            if i not in keep:
-                keep.append(i)
+        keeps = open('./keep.txt').read().splitlines()
+        # for i in keeps:
+        #     if i not in keep:
+        #         keep.append(i)
+        keep = keeps
     except Exception as e:
         print(e)
-        pass  #keep = []
+        pass  # keep = []
     return keep
 
 
@@ -342,7 +344,7 @@ if __name__ == '__main__':
             if onlineList:
                 for online in onlineList:
                     user_id, user_nick, title = online['user_id'], online['user_nick'], online['title']
-                    if user_id not in recording and (not wait.value or user_id in keep):
+                    if user_id not in recording and (not wait or user_id in keep):
                         th = Thread(target=start_process, args=(user_id, user_nick, title,), name=user_id, daemon=True)
                         th.start()
             else:
