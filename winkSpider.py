@@ -13,25 +13,26 @@ from multiprocessing import Process  # , Pool, Manager, Value
 
 import streamlink
 
+
 headers = {
-    'authority': 'api.winktv.co.kr',
+    'authority': 'api.pandalive.co.kr',
     'accept': 'application/json, text/plain, */*',
     'accept-language': 'zh-CN,zh;q=0.9,zh-RU;q=0.8,en-RU;q=0.7,en;q=0.6',
     'cache-control': 'no-cache',
     'content-type': 'application/x-www-form-urlencoded',
-    'cookie': 'userLoginSaveYN=Y; userLoginSaveID=YzJWdWFXRTBaWFpsY2c9PQ%3D%3D; partner=winktv; sessKey=7011f42b09994ee3738938363e00e53b5aae354e14e5d45603db2cf264c5fe91; userLoginIdx=9991318; userLoginYN=Y; 3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16=teL7pUma2a7zlOgK3ieuooWSX0Uqpcg%2BaUJuMcoPVvlfCQyaWWZmJQNTL8L03vTwbYBjZZ%2FxXSfL0rPpq5Ca4yHBunZfRC6Rirw2Bf1fbOGugFs510jtPq8kMIGKcMNRQzsdcu5RBxI2otp%2BTrPAb71QRW1JFjCLsEzd1h8fL1uL3SqBsS9kWkRWwWFbmJA0',
+    'cookie': '_ga_W91XDLC3YE=GS1.1.1691785384.1.1.1691786460.0.0.0; _ga_0J8HGTPY46=GS1.1.1691785390.1.1.1691786459.0.0.0; _ga_NGSHFJTQS1=GS1.1.1691785389.1.1.1691786459.0.0.0; _ga_PNYVGEQX89=GS1.1.1691785388.1.1.1691786459.0.0.0; _ga_ZJ51R4C39H=GS1.3.1691785390.1.1.1691786454.60.0.0; _ga=GA1.1.924838757.1691785384; _gat_UA-193540779-1=1; _gat_gtag_UA_194444882_2=1; _gid=GA1.3.723813937.1691785386; 3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16=RdSYtZsDnP3Wz9Ysgv4yOSYu1fUQAkZMVbvziMseSDDcGAV0rdDsCK5LVNyKasiNGZHx%2BOhAnV%2FdwwuKAK7rPH0nUjshhrJq%2B9kETMF2Ta1Q3QP3zePMsA4J3PTYuIw9vmOaFGo1vw8iNvHHqJPw4LSLuZM4j%2Fc7iZRxNTHI%2FPF15I7v44HxW%2FMtJspddLnP; partner=login_n; userLoginIdx=13339740; userLoginSaveID=WjJjd056QTU%3D; userLoginSaveYN=Y; userLoginYN=Y; _gcl_au=1.1.1130798816.1691785385; sessKey=fbc5f64f4810cb99da51fa8a9658da90db1a3c4a66977283c78f7f4bf862c373',
     # 'userLoginSaveYN=Y; userLoginSaveID=YzJWdWFXRTBaWFpsY2c9PQ%3D%3D; _gcl_au=1.1.894357695.1667040572; _ga=GA1.3.1009708996.1657246450; _ga_W91XDLC3YE=GS1.1.1667284058.21.1.1667284137.0.0.0; _ga_NGSHFJTQS1=GS1.1.1667284059.21.1.1667284137.0.0.0; partner=winktv; sessKey=f3186e501dcc692b34acb07f9eb63ba94b0a4114be4349c7003f6747f3908a08; userLoginYN=Y; userLoginIdx=9991318; 3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16=D1DgYEWN6RnkUpwU0tUYDXbVZNzWD2PaZgH9nA%2F2GNN1C9CW7oBcytnxbtZsv6ee8O8HHN2wpY6d9k%2FMiHCRK65feGZPfldLZ8ruufto220HBk8B7gDlHtDgLifE4%2Fao3i0HyAUALEfR116yV8ZEbYJQk51Pi%2FlprL%2Br9QkcwoEglhH349ECqQM6ljSkkDc5',
-    'origin': 'https://www.winktv.co.kr',
+    'origin': 'https://www.pandalive.co.kr',
     'pragma': 'no-cache',
-    'referer': 'https://www.winktv.co.kr/',
+    'referer': 'https://www.pandalive.co.kr/',
     'sec-ch-ua': '"Google Chrome";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"macOS"',
     'sec-fetch-dest': 'empty',
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-site',
-    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
-    'x-device-info': '{"t":"webPc","v":"1.0","ui":1783371}',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+    'x-device-info': '{"t":"webPc","v":"1.0","ui":0}',
 }
 
 data = {
