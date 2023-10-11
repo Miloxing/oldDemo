@@ -12,24 +12,9 @@ from threading import Thread
 from multiprocessing import Process  # , Pool, Manager, Value
 
 import streamlink
+from config import *
 
-
-headers = {
-    'authority': 'api.pandalive.co.kr',
-    'accept': 'application/json, text/plain, */*',
-    'accept-language': 'zh-CN,zh;q=0.9,zh-RU;q=0.8,en-RU;q=0.7,en;q=0.6',
-    'cache-control': 'no-cache',
-    'content-type': 'application/x-www-form-urlencoded',
-    'cookie': '_ga=GA1.1.1027634514.1696952452; _ga_0J8HGTPY46=GS1.1.1696958507.2.1.1696959143.0.0.0; _ga_NGSHFJTQS1=GS1.1.1696958507.2.1.1696959143.0.0.0; _ga_PNYVGEQX89=GS1.1.1696958507.2.1.1696959143.0.0.0; _ga_W91XDLC3YE=GS1.1.1696958507.2.1.1696959143.17.0.0; _ga_ZJ51R4C39H=GS1.3.1696958507.2.1.1696959143.18.0.0; _gid=GA1.3.703591781.1696952453; _gat_UA-193540779-1=1; _gat_gtag_UA_194444882_2=1; 3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16=S6e%2BAnarD0bUYiijyUPqnk61vurvOntmcsg%2FlCTOkYUdiCHazcYV1G%2Fhhmi5CxVH1RpHIKTwfNNZm%2BJ%2FWuvYE5kFdRpIXspJ7D3ygzhiD1vUKY8tlzhqzRJ%2FytAQimkx%2F8xVBT0nMRyaM2VB%2Fci1TYTW%2FnMe%2BDy5iKNwKJvLOn7creqhqLWpriiolLRSy23N; partner=login_n; userLoginIdx=13339740; userLoginSaveID=WjJjd056QTU%3D; userLoginSaveYN=Y; userLoginYN=Y; _gcl_au=1.1.2117423094.1696952452; sessKey=8096e70e9f1da81af081ba9f4ae2e1b8166fe6bbfa172c0783be875e5e005887',
-    # 'userLoginSaveYN=Y; userLoginSaveID=YzJWdWFXRTBaWFpsY2c9PQ%3D%3D; _gcl_au=1.1.894357695.1667040572; _ga=GA1.3.1009708996.1657246450; _ga_W91XDLC3YE=GS1.1.1667284058.21.1.1667284137.0.0.0; _ga_NGSHFJTQS1=GS1.1.1667284059.21.1.1667284137.0.0.0; partner=winktv; sessKey=f3186e501dcc692b34acb07f9eb63ba94b0a4114be4349c7003f6747f3908a08; userLoginYN=Y; userLoginIdx=9991318; 3be3f8e358abbf54cec643229de77fc9e4f3f0bbc9b171580d45d13aaa374c16=D1DgYEWN6RnkUpwU0tUYDXbVZNzWD2PaZgH9nA%2F2GNN1C9CW7oBcytnxbtZsv6ee8O8HHN2wpY6d9k%2FMiHCRK65feGZPfldLZ8ruufto220HBk8B7gDlHtDgLifE4%2Fao3i0HyAUALEfR116yV8ZEbYJQk51Pi%2FlprL%2Br9QkcwoEglhH349ECqQM6ljSkkDc5',
-    'origin': 'https://www.pandalive.co.kr',
-    'referer': 'https://www.pandalive.co.kr/',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'same-site',
-    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
-    'x-device-info': '{"t":"webPc","v":"1.0","ui":0}',
-}
+headers = header_to_json(header_raw)
 
 data = {
     'offset': '0',
