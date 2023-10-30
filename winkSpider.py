@@ -219,9 +219,9 @@ def start_record(user_id, user_nick, title):
         return
     session = streamlink.Streamlink()
     if threads:
-        session.set_option('hls-segment-threads', int(threads))
+        session.set_option('stream-segment-threads', int(threads))
     if trytimes:
-        session.set_option('hls-segment-attempts', int(trytimes))
+        session.set_option('stream-segment-attempts', int(trytimes))
     session.set_option('hls-live-edge', 9999)
     try:
         streams = session.streams('hlsvariant://' + hls)
@@ -296,7 +296,7 @@ def run():
     free_size = get_free_size()
     keep = get_keep_list()
     # if free_size.value <= 30 or (wait.value and free_size.value <= 35):
-    if free_size <= 30 or (wait and free_size <= 35):
+    if free_size <= 10 or (wait and free_size <= 15):
         sys.stdout.write(f"\r\033[K剩余空间{free_size}G, 停止下载")
         wait = 1
     else:
